@@ -25,6 +25,17 @@ export class Document {
   }
 
   static create(props: DocumentProps): Document {
+    this.validate(props);
     return new Document(props);
+  }
+
+  private static validate(props: DocumentProps): void {
+    if (!props.name || props.name.trim() === '') {
+      throw new Error('Document name cannot be empty');
+    }
+
+    if (props.version < 1) {
+      throw new Error('Document version must be at least 1');
+    }
   }
 }
