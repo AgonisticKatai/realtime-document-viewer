@@ -1,13 +1,18 @@
 import { describe, it, expect } from 'vitest';
 import { Document } from './Document';
+import { Contributor } from './Contributor';
 
 describe('Document', () => {
   it('should create a document with all required properties', () => {
     const now = new Date();
+    const contributor = Contributor.create({
+      id: 'c1',
+      name: 'John Doe'
+    });
     
     const document = Document.create({
       attachments: [],
-      contributors: [],
+      contributors: [contributor],
       createdAt: now,
       id: '123',
       name: 'Project Proposal',
@@ -15,7 +20,9 @@ describe('Document', () => {
     });
 
     expect(document.attachments).toEqual([]);
-    expect(document.contributors).toEqual([]);
+    expect(document.contributors).toHaveLength(1);
+    expect(document.contributors[0].id).toBe('c1');
+    expect(document.contributors[0].name).toBe('John Doe');
     expect(document.createdAt).toBe(now);
     expect(document.id).toBe('123');
     expect(document.name).toBe('Project Proposal');
