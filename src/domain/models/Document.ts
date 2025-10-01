@@ -1,6 +1,8 @@
+import { Contributor } from './Contributor';
+
 export interface DocumentProps {
   attachments: string[];
-  contributors: string[];
+  contributors: Contributor[];
   createdAt: Date;
   id: string;
   name: string;
@@ -9,7 +11,7 @@ export interface DocumentProps {
 
 export class Document {
   readonly attachments: string[];
-  readonly contributors: string[];
+  readonly contributors: Contributor[];
   readonly createdAt: Date;
   readonly id: string;
   readonly name: string;
