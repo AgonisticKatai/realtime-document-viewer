@@ -33,3 +33,6 @@ coverage/
 
 # OS
 Thumbs.db
+
+# Server (external dependency, not part of the solution)
+server/
