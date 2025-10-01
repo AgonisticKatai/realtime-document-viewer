@@ -21,4 +21,30 @@ describe('Document', () => {
     expect(document.name).toBe('Project Proposal');
     expect(document.version).toBe(1);
   });
+
+  it('should throw error when name is empty', () => {
+    expect(() => {
+      Document.create({
+        attachments: [],
+        contributors: [],
+        createdAt: new Date(),
+        id: '123',
+        name: '',
+        version: 1
+      });
+    }).toThrow('Document name cannot be empty');
+  });
+
+  it('should throw error when version is less than 1', () => {
+    expect(() => {
+      Document.create({
+        attachments: [],
+        contributors: [],
+        createdAt: new Date(),
+        id: '123',
+        name: 'Test',
+        version: 0
+      });
+    }).toThrow('Document version must be at least 1');
+  });
 });
