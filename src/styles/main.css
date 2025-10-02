@@ -19,3 +19,28 @@ body {
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
 }
+
+.header {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-4);
+}
+
+.header h1 {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.main {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: var(--space-6);
+  width: 100%;
+}
+
+.document-list {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
