@@ -1,0 +1,14 @@
+:root {
+  /* Base colors using oklch for better interpolation */
+  --color-primary: oklch(55% 22% 250deg);
+  --color-primary-hover: oklch(45% 22% 250deg);
+
+  /* Neutrals */
+  --color-surface: oklch(100% 0% 0deg);
+  --color-background: oklch(97% 1% 250deg);
+
+  /* Text colors */
+  --color-text-primary: oklch(25% 2% 250deg);
+  --color-text-secondary: oklch(50% 2% 250deg);
+  --color-text-tertiary: oklch(65% 2% 250deg);
+}
