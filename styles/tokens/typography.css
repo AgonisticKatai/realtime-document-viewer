@@ -1,0 +1,16 @@
+:root {
+  /* Font sizes */
+  --font-size-xs: clamp(0.75rem, 0.7vw + 0.6rem, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 0.8vw + 0.7rem, 1rem);
+  --font-size-base: clamp(1rem, 1vw + 0.75rem, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 1.2vw + 0.85rem, 1.25rem);
+
+  /* Font weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Line heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+}
