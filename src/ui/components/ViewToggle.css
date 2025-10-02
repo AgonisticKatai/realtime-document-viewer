@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+
+.view-toggle {
+  background: var(--color-surface);
+  border: 1px solid oklch(85% 0% 0deg);
+  border-radius: var(--radius-md);
+  display: flex;
+  padding: 0.25rem;
+}
+
+.view-toggle button {
+  align-items: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2);
+  transition: all 0.2s;
+}
+
+.view-toggle button:hover {
+  background: oklch(95% 0% 0deg);
+  color: var(--color-text-primary);
+}
+
+.view-toggle button.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.view-toggle button svg {
+  height: 1.25rem;
+  width: 1.25rem;
+}
