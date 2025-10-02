@@ -39,8 +39,22 @@ body {
   width: 100%;
 }
 
+.controls {
+  align-items: center;
+  display: flex;
+  gap: var(--space-4);
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
 .document-list {
   display: grid;
   gap: var(--space-4);
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.document-list.list-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
