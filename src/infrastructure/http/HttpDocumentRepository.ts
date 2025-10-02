@@ -14,7 +14,7 @@ export class HttpDocumentRepository implements DocumentRepository {
     }
 
     const documentsDto: DocumentDTO[] = await response.json();
-    
+
     return this.mapDocuments({ documentsDto });
   }
 

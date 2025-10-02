@@ -1,5 +1,5 @@
-import { Document } from '../../../domain/models/Document';
 import { Contributor } from '../../../domain/models/Contributor';
+import { Document } from '../../../domain/models/Document';
 import { DocumentDTO } from '../dtos/DocumentDTO';
 
 export class DocumentMapper {

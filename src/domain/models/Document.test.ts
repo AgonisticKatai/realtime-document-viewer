@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { Document } from './Document';
 import { Contributor } from './Contributor';
+import { Document } from './Document';
 
 describe('Document', () => {
   it('should create a document with all required properties', () => {
@@ -9,7 +9,7 @@ describe('Document', () => {
       id: 'c1',
       name: 'John Doe'
     });
-    
+
     const document = Document.create({
       attachments: [],
       contributors: [contributor],
