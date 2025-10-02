@@ -1,0 +1,8 @@
+:root {
+  /* Fluid spacing scale */
+  --space-1: clamp(0.25rem, 0.5vw + 0.125rem, 0.5rem);
+  --space-2: clamp(0.5rem, 1vw + 0.25rem, 0.75rem);
+  --space-3: clamp(0.75rem, 1.5vw + 0.5rem, 1rem);
+  --space-4: clamp(1rem, 2vw + 0.75rem, 1.5rem);
+  --space-6: clamp(1.5rem, 3vw + 1rem, 2rem);
+}
