@@ -1,10 +1,5 @@
+import type { DocumentFormData } from '../types';
 import styles from './DocumentForm.css?inline';
-
-interface FormData {
-  attachments: string[];
-  contributors: string[];
-  name: string;
-}
 
 export class DocumentForm extends HTMLElement {
   constructor() {
@@ -101,7 +96,7 @@ export class DocumentForm extends HTMLElement {
       return;
     }
 
-    const formData: FormData = {
+    const formData: DocumentFormData = {
       attachments: this.parseTextarea({ value: attachmentsInput.value }),
       contributors: this.parseTextarea({ value: contributorsInput.value }),
       name
