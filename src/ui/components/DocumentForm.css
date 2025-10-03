@@ -19,6 +19,15 @@ dialog::backdrop {
   background: rgb(0 0 0 / 0.5);
 }
 
+dialog:has(.error-message:not(:empty))::backdrop {
+  background: color-mix(in srgb, oklch(65% 0.15 25deg) 10%, rgb(0 0 0 / 0.5));
+}
+
+form:has(input:valid:not(:placeholder-shown)):not(:has(input:invalid)) {
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, oklch(70% 0.15 150deg) 30%, transparent);
+}
+
 .modal-header {
   align-items: center;
   display: flex;
@@ -49,6 +58,22 @@ dialog::backdrop {
 .form-group {
   margin-bottom: var(--space-4);
   width: 100%;
+
+  /* ✨ :has() - Form group con error tiene fondo rojizo */
+  &:has(.error-message:not(:empty)) {
+    background: color-mix(in srgb, oklch(65% 0.15 25deg) 5%, transparent);
+    border-left: 3px solid oklch(65% 0.15 25deg);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+  }
+
+  /* ✨ :has() - Form group con input válido y contenido */
+  &:has(input:valid:not(:placeholder-shown)) {
+    background: color-mix(in srgb, oklch(70% 0.15 150deg) 3%, transparent);
+    border-left: 3px solid oklch(70% 0.15 150deg);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+  }
 }
 
 .form-label {
@@ -68,11 +93,27 @@ dialog::backdrop {
   font-family: inherit;
   font-size: var(--font-size-sm);
   padding: var(--space-2) var(--space-3);
+  transition: all 0.2s ease;
   width: 100%;
 
   &:focus {
     border-color: var(--color-primary);
     outline: none;
+  }
+
+  /* ✨ :has() - Input dentro de form-group con error */
+  .form-group:has(.error-message:not(:empty)) & {
+    border-color: oklch(65% 0.15 25deg);
+    
+    &:focus {
+      border-color: oklch(65% 0.15 25deg);
+      box-shadow: 0 0 0 3px color-mix(in srgb, oklch(65% 0.15 25deg) 20%, transparent);
+    }
+  }
+
+  /* ✨ :has() - Input válido con contenido */
+  .form-group:has(&:valid:not(:placeholder-shown)) & {
+    border-color: oklch(70% 0.15 150deg);
   }
 }
 
