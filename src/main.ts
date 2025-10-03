@@ -3,7 +3,9 @@ import { CreateDocumentUseCase } from './domain/usecases/CreateDocumentUseCase';
 import { GetDocumentsUseCase } from './domain/usecases/GetDocumentsUseCase';
 import { SortDocumentsUseCase } from './domain/usecases/SortDocumentsUseCase';
 import { HttpDocumentRepository } from './infrastructure/http/HttpDocumentRepository';
+import { WebSocketNotificationService } from './infrastructure/websocket/WebSocketNotificationService';
 import { DocumentCard } from './ui/components/DocumentCard';
+import { NotificationToast } from './ui/components/NotificationToast';
 
 import type { SortBy } from './domain/types';
 import type { ViewMode } from './ui/types';
@@ -17,8 +19,12 @@ import './ui/components/ViewToggle';
 
 let allDocuments: Document[] = [];
 let currentViewMode: ViewMode = 'grid';
+
 const sortDocumentsUseCase = new SortDocumentsUseCase();
 const createDocumentUseCase = new CreateDocumentUseCase();
+const notificationService = new WebSocketNotificationService({
+  url: 'ws://localhost:8080/notifications'
+});
 
 async function fetchDocuments() {
   const repository = new HttpDocumentRepository({ baseUrl: 'http://localhost:8080' });
@@ -81,8 +87,35 @@ function showCreateDocumentForm() {
   });
 }
 
+function showNotification({ documentTitle, userName }: { documentTitle: string; userName: string }) {
+  const container = document.getElementById('notifications');
+  if (!container) {
+    return;
+  }
+
+  const toast = new NotificationToast();
+  container.appendChild(toast);
+
+  toast.show({ documentTitle, userName });
+
+  setTimeout(() => {
+    if (container.contains(toast)) {
+      container.removeChild(toast);
+    }
+  }, 3500);
+}
+
 function initApp() {
   fetchDocuments();
+
+  notificationService.onNotification((notification) => {
+    showNotification({
+      documentTitle: notification.documentTitle,
+      userName: notification.userName
+    });
+  });
+
+  notificationService.connect();
 
   const sortControl = document.querySelector('sort-control');
 
