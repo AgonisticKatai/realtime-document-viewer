@@ -69,7 +69,7 @@ src/
 
 ### 🚨 **Error Handling System**
 
-The application uses a functional **InlineError pattern** inspired by Go:
+The application uses a functional **InlineError pattern**:
 
 ```typescript
 // Simple, elegant error handling
@@ -269,7 +269,7 @@ Coverage focuses on business logic and critical paths. UI components have basic 
 
 ### 🎯 Why Service-Oriented Architecture?
 
-**From monolithic main.ts (158 lines) to clean services:**
+**Service Layer Components:**
 - 📍 **AppController**: Orchestrates the entire application
 - 📄 **DocumentService**: Encapsulates all document logic  
 - 🎨 **UIRenderer**: Handles presentation concerns
@@ -345,69 +345,6 @@ Following Single Responsibility Principle:
 - **CreateDocumentUseCase** - Create new documents with validation
 
 Each use case is testable, reusable, and maintainable.
-
-## 🔄 Architecture Evolution
-
-### 📈 **From Monolith to Services**
-
-**Before: Monolithic main.ts (158 lines)**
-```typescript
-// ❌ Everything mixed together
-let allDocuments = [];
-let currentViewMode = 'grid';
-const sortDocumentsUseCase = new SortDocumentsUseCase();
-// ... 150+ lines of mixed concerns
-```
-
-**After: Clean Service Architecture (10 lines main.ts)**
-```typescript
-// ✅ Clean separation
-import { AppController } from './services/AppController';
-import './styles/main.css';
-// Component imports...
-
-const appController = new AppController();
-appController.init();
-```
-
-### 🎯 **Refactoring Benefits Achieved**
-
-| Aspect | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| **Lines in main.ts** | 158 lines | 10 lines | 📉 **94% reduction** |
-| **Responsibilities** | Mixed (7+ concerns) | Single (initialization) | 🎯 **Clear SRP** |
-| **Testability** | Difficult | Each service isolated | ✅ **Fully testable** |
-| **Maintainability** | Monolithic changes | Localized changes | 🔧 **Easy maintenance** |
-| **Readability** | Complex, nested logic | Clean, focused services | 📖 **Highly readable** |
-
-### 🏗️ **Service Responsibilities**
-
-```typescript
-// 🎛️ AppController - Application orchestration
-class AppController {
-  async init() { /* coordinate services */ }
-  private setupEventListeners() { /* handle UI events */ }
-}
-
-// 📄 DocumentService - Business logic
-class DocumentService {
-  async fetchDocuments() { /* API calls */ }
-  sortDocuments() { /* sorting logic */ }
-  createDocument() { /* creation logic */ }
-}
-
-// 🎨 UIRenderer - Presentation
-class UIRenderer {
-  renderDocuments() { /* DOM manipulation */ }
-  setViewMode() { /* view state */ }
-}
-
-// 🔔 NotificationManager - Real-time communication
-class NotificationManager {
-  connect() { /* WebSocket setup */ }
-  showNotification() { /* toast display */ }
-}
-```
 
 ## 🌐 Browser Support
 
