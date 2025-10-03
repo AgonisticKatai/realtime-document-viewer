@@ -17,19 +17,19 @@
   padding: var(--space-6);
   transition: all 0.2s;
   width: 100%;
-}
 
-.add-card:hover {
-  border-color: var(--color-primary);
-  border-style: solid;
-}
+  &:hover {
+    border-color: var(--color-primary);
+    border-style: solid;
+  }
 
-.add-card svg {
-  height: 2rem;
-  width: 2rem;
-}
+  & svg {
+    height: 2rem;
+    width: 2rem;
+  }
 
-.add-card span {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  & span {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
 }

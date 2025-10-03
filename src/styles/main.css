@@ -25,12 +25,12 @@ body {
   background: var(--color-surface);
   box-shadow: var(--shadow-sm);
   padding: var(--space-4);
-}
 
-.header h1 {
-  color: var(--color-text-primary);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  & h1 {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
 }
 
 .main {
@@ -52,12 +52,12 @@ body {
   display: grid;
   gap: var(--space-4);
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-}
 
-.document-list.list-view {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  &.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
 }
 
 .notifications {
