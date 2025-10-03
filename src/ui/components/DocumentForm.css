@@ -44,14 +44,23 @@ form:has(input:valid:not(:placeholder-shown)):not(:has(input:invalid)) {
 .close-button {
   background: transparent;
   border: none;
+  border-radius: var(--radius-sm);
   color: var(--color-text-secondary);
   cursor: pointer;
   font-size: 1.5rem;
   line-height: 1;
-  padding: 0;
+  padding: var(--space-1);
+  transition: all 0.2s ease;
 
   &:hover {
+    background: var(--color-hover-overlay);
     color: var(--color-text-primary);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    background: var(--color-active-overlay);
+    transform: scale(0.95);
   }
 }
 
@@ -59,18 +68,16 @@ form:has(input:valid:not(:placeholder-shown)):not(:has(input:invalid)) {
   margin-bottom: var(--space-4);
   width: 100%;
 
-  /* ✨ :has() - Form group con error tiene fondo rojizo */
   &:has(.error-message:not(:empty)) {
-    background: color-mix(in srgb, oklch(65% 0.15 25deg) 5%, transparent);
-    border-left: 3px solid oklch(65% 0.15 25deg);
+    background: var(--color-error-subtle);
+    border-left: 3px solid var(--color-error);
     border-radius: var(--radius-md);
     padding: var(--space-3);
   }
 
-  /* ✨ :has() - Form group con input válido y contenido */
   &:has(input:valid:not(:placeholder-shown)) {
-    background: color-mix(in srgb, oklch(70% 0.15 150deg) 3%, transparent);
-    border-left: 3px solid oklch(70% 0.15 150deg);
+    background: var(--color-success-subtle);
+    border-left: 3px solid var(--color-success);
     border-radius: var(--radius-md);
     padding: var(--space-3);
   }
@@ -101,19 +108,21 @@ form:has(input:valid:not(:placeholder-shown)):not(:has(input:invalid)) {
     outline: none;
   }
 
-  /* ✨ :has() - Input dentro de form-group con error */
   .form-group:has(.error-message:not(:empty)) & {
-    border-color: oklch(65% 0.15 25deg);
+    border-color: var(--color-error);
     
     &:focus {
-      border-color: oklch(65% 0.15 25deg);
-      box-shadow: 0 0 0 3px color-mix(in srgb, oklch(65% 0.15 25deg) 20%, transparent);
+      border-color: var(--color-error-strong);
+      box-shadow: 0 0 0 3px var(--color-error-subtle);
     }
   }
 
-  /* ✨ :has() - Input válido con contenido */
   .form-group:has(&:valid:not(:placeholder-shown)) & {
-    border-color: oklch(70% 0.15 150deg);
+    border-color: var(--color-success);
+    
+    &:focus {
+      box-shadow: 0 0 0 3px var(--color-success-subtle);
+    }
   }
 }
 
@@ -143,8 +152,13 @@ form:has(input:valid:not(:placeholder-shown)):not(:has(input:invalid)) {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   padding: var(--space-2) var(--space-4);
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   white-space: nowrap;
+
+  &:focus {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
 }
 
 .button-primary {
@@ -152,17 +166,31 @@ form:has(input:valid:not(:placeholder-shown)):not(:has(input:invalid)) {
   color: white;
 
   &:hover {
-    background: var(--color-primary-hover);
+    background: var(--color-primary-strong);
+    box-shadow: 0 4px 12px color-mix(in oklch, var(--color-primary) 25%, transparent);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    background: color-mix(in oklch, var(--color-primary) 90%, oklch(20% 25% 250deg));
+    transform: translateY(0);
   }
 }
 
 .button-secondary {
   background: transparent;
-  border: 1px solid oklch(85% 0% 0deg);
+  border: 1px solid color-mix(in oklch, var(--color-text-tertiary) 50%, transparent);
   color: var(--color-text-primary);
 
   &:hover {
-    background: oklch(95% 0% 0deg);
+    background: var(--color-hover-overlay);
+    border-color: var(--color-text-secondary);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    background: var(--color-active-overlay);
+    transform: translateY(0);
   }
 }
 
