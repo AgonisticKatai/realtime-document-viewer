@@ -1,0 +1,36 @@
+/* 
+ * Base theme for Web Components with Shadow DOM
+ * Includes reset and common imports needed for all components
+ */
+
+/* Import design tokens */
+@import url('./tokens/colors.css');
+@import url('./tokens/spacing.css');
+@import url('./tokens/typography.css');
+@import url('./tokens/shadows.css');
+@import url('./tokens/radius.css');
+@import url('./accessibility.css');
+
+/* Shadow DOM Reset - Essential for all Web Components */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base host styles that most components need */
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+/* Common focus styles for components */
+:host(:focus-visible) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

@@ -1,6 +1,7 @@
+@import url('../../styles/component-theme.css');
+
 :host {
   container-type: inline-size;
-  display: block;
 }
 
 .card {

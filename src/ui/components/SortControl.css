@@ -1,8 +1,4 @@
-@import url('../../styles/accessibility.css');
-
-:host {
-  display: block;
-}
+@import url('../../styles/component-theme.css');
 
 .sort-control {
   align-items: center;
