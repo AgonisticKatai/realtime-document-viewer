@@ -26,7 +26,8 @@ The project follows a clean hexagonal architecture separating business logic fro
 - **Client-side sorting**: Single API call, all operations in memory for performance
 - **Immutable entities**: Domain models are readonly after creation
 - **Factory pattern**: Controlled entity creation with validation
-- **CSS tokens**: Modern CSS with custom properties, oklch colors, clamp for fluid scaling
+- **Design System**: Modern CSS architecture with centralized theme, tokens, and Web Component styling
+- **CSS tokens**: Custom properties, oklch colors, fluid scaling with clamp(), native CSS nesting
 
 ## 🛠️ Tech Stack
 
@@ -90,6 +91,41 @@ This application implements comprehensive accessibility features following **WCA
 - **ARIA best practices** - Proper roles, states, and properties
 - **Keyboard patterns** - Following established interaction patterns
 - **Focus indicators** - 2px minimum outline with adequate contrast ratios
+
+## 🎨 CSS Architecture & Design System
+
+### 🏗️ **Modular Structure**
+```
+src/styles/
+├── component-theme.css    # Base theme for Web Components
+├── main.css              # Global document styles
+├── accessibility.css     # Accessibility utilities
+└── tokens/               # Design tokens
+    ├── colors.css        # Color palette with oklch()
+    ├── spacing.css       # Spacing scale (rem units)
+    ├── typography.css    # Font scales and weights
+    ├── radius.css        # Border radius tokens
+    └── shadows.css       # Shadow scale
+```
+
+### 🧩 **Web Components Theme**
+- **Centralized base** - All components import `component-theme.css`
+- **Shadow DOM reset** - Proper box-sizing and base styles
+- **Token inheritance** - Design tokens available in all components
+- **DRY principle** - No repeated imports or resets
+
+### 🎯 **Modern CSS Features**
+- **Native CSS nesting** - Hierarchical organization without preprocessors
+- **Custom properties** - Dynamic theming and consistent tokens
+- **oklch() colors** - Perceptually uniform color space
+- **Fluid typography** - `clamp()` for responsive scaling
+- **Container queries** - Component-based responsive design (prepared)
+
+### 📐 **Design Tokens**
+- **Semantic naming** - `--color-primary`, `--space-4`, `--font-size-lg`
+- **Consistent scales** - Mathematical progression for spacing and typography
+- **Accessibility first** - Color contrast and touch target considerations
+- **Future-proof** - Easy theme switching and dark mode implementation
 
 ## 📋 Prerequisites
 
@@ -205,12 +241,19 @@ Each use case is testable, reusable, and maintainable.
 ## 🌐 Browser Support
 
 Tested in the latest two versions of Chrome as per requirements. Uses modern web features:
-- ES2020
-- CSS Nesting
-- Custom Properties (CSS Variables)
-- oklch() color function
-- Container Queries (prepared)
-- Shadow DOM
+
+### 🚀 **JavaScript/Web APIs**
+- ES2020 modules and features
+- Web Components with Shadow DOM
+- Custom Elements v1
+- WebSocket API
+
+### 🎨 **CSS Features**
+- **CSS Nesting** (Chrome 112+, Firefox 117+, Safari 16.5+)
+- **Custom Properties** - Dynamic theming
+- **oklch() colors** - Perceptually uniform color space
+- **Container Queries** - Component-responsive design (prepared)
+- **CSS Grid** and **Flexbox** - Modern layouts
 
 ## 🔌 API Integration
 
