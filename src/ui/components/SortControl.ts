@@ -1,4 +1,4 @@
-import { SortBy } from '../../domain/usecases/GetDocumentsUseCase';
+import type { SortBy } from '../../domain/types';
 import styles from './SortControl.css?inline';
 
 export class SortControl extends HTMLElement {
@@ -40,7 +40,7 @@ export class SortControl extends HTMLElement {
       select.addEventListener('change', () => {
         const sortBy = select.value as SortBy | '';
         this.dispatchEvent(new CustomEvent('sortchange', {
-          detail: { sortBy: sortBy || undefined }
+          detail: { sortBy: sortBy === '' ? undefined : sortBy }
         }));
       });
     }
