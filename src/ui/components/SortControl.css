@@ -1,3 +1,5 @@
+@import url('../../styles/accessibility.css');
+
 :host {
   display: block;
 }
@@ -25,9 +27,12 @@
   transition: border-color 0.2s;
 }
 
+/* Accessibility enhancements */
 .sort-control select:focus {
   border-color: var(--color-primary);
-  outline: none;
+  box-shadow: 0 0 0 4px oklch(60% 0.15 240deg / 0.3);
+  outline: 2px solid oklch(60% 0.15 240deg);
+  outline-offset: 2px;
 }
 
 .sort-control select:hover {

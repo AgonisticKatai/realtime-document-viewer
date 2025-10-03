@@ -32,20 +32,32 @@ export class ViewToggle extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>${styles}</style>
       
-      <div class="view-toggle">
+      <div 
+        aria-label="View mode selector"
+        class="view-toggle" 
+        role="group" 
+      >
         <button 
-          data-mode="list" 
+          aria-label="Switch to list view"
+          aria-pressed="${this._mode === 'list'}"
           class="${this._mode === 'list' ? 'active' : ''}"
-          aria-label="List view"
+          data-mode="list" 
+          title="List view - display documents as a vertical list"
+          type="button"
         >
-          ${this.getListIcon()}
+          <span aria-hidden="true">${this.getListIcon()}</span>
+          <span class="sr-only">List view</span>
         </button>
         <button 
-          data-mode="grid" 
+          aria-label="Switch to grid view"
+          aria-pressed="${this._mode === 'grid'}"
           class="${this._mode === 'grid' ? 'active' : ''}"
-          aria-label="Grid view"
+          data-mode="grid" 
+          title="Grid view - display documents as cards in a grid"
+          type="button"
         >
-          ${this.getGridIcon()}
+          <span aria-hidden="true">${this.getGridIcon()}</span>
+          <span class="sr-only">Grid view</span>
         </button>
       </div>
     `;
@@ -54,19 +66,74 @@ export class ViewToggle extends HTMLElement {
   private attachEventListeners(): void {
     const buttons = this.shadowRoot?.querySelectorAll('button');
 
-    buttons?.forEach(button => {
+    buttons?.forEach((button, index) => {
       button.addEventListener('click', () => {
-        const newMode = button.getAttribute('data-mode') as ViewMode;
-        if (newMode !== this._mode) {
-          this._mode = newMode;
-          this.render();
-          this.attachEventListeners();
-          this.dispatchEvent(new CustomEvent('viewchange', {
-            detail: { mode: this._mode }
-          }));
-        }
+        this.handleModeChange(button);
+      });
+
+      button.addEventListener('keydown', (event) => {
+        this.handleKeydown(event, buttons, index);
       });
     });
+  }
+
+  private handleModeChange(button: HTMLButtonElement): void {
+    const newMode = button.getAttribute('data-mode') as ViewMode;
+    if (newMode !== this._mode) {
+      this._mode = newMode;
+      this.render();
+      this.attachEventListeners();
+      this.dispatchEvent(new CustomEvent('viewchange', {
+        detail: { mode: this._mode }
+      }));
+
+      // Announce the change to screen readers
+      this.announceChange(newMode);
+    }
+  }
+
+  private handleKeydown(event: KeyboardEvent, buttons: NodeListOf<Element>, currentIndex: number): void {
+    let targetIndex = currentIndex;
+
+    switch (event.key) {
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        event.preventDefault();
+        targetIndex = currentIndex === 0 ? buttons.length - 1 : currentIndex - 1;
+        break;
+      case 'ArrowRight':
+      case 'ArrowDown':
+        event.preventDefault();
+        targetIndex = currentIndex === buttons.length - 1 ? 0 : currentIndex + 1;
+        break;
+      case 'Home':
+        event.preventDefault();
+        targetIndex = 0;
+        break;
+      case 'End':
+        event.preventDefault();
+        targetIndex = buttons.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    (buttons[targetIndex] as HTMLButtonElement).focus();
+  }
+
+  private announceChange(mode: ViewMode): void {
+    const announcement = document.createElement('div');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.setAttribute('aria-atomic', 'true');
+    announcement.className = 'sr-only';
+    announcement.textContent = `View changed to ${mode} mode`;
+
+    document.body.appendChild(announcement);
+
+    // Remove the announcement after screen readers have processed it
+    setTimeout(() => {
+      document.body.removeChild(announcement);
+    }, 1000);
   }
 
   private getListIcon(): string {

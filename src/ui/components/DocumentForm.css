@@ -1,3 +1,5 @@
+@import url('../../styles/accessibility.css');
+
 :host {
   display: block;
 }
@@ -126,4 +128,15 @@
 
 .button-secondary:hover {
   background: oklch(95% 0% 0deg);
+}
+
+/* Accessibility enhancements */
+.error-message {
+  color: oklch(50% 0.15 30deg);
+  font-size: 0.8125rem;
+  margin-top: 4px;
+}
+
+.required-indicator {
+  color: oklch(50% 0.15 30deg);
 }

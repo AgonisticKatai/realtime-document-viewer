@@ -1,3 +1,5 @@
+@import url('../../styles/accessibility.css');
+
 :host {
   display: block;
 }
@@ -36,4 +38,11 @@
 .view-toggle button svg {
   height: 1.25rem;
   width: 1.25rem;
+}
+
+/* Accessibility enhancements */
+.view-toggle button:focus {
+  box-shadow: 0 0 0 4px oklch(60% 0.15 240deg / 0.3);
+  outline: 2px solid oklch(60% 0.15 240deg);
+  outline-offset: 2px;
 }

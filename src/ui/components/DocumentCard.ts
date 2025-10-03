@@ -39,39 +39,89 @@ export class DocumentCard extends HTMLElement {
       return;
     }
 
+    const formattedDate = this._document.createdAt.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+
     this.shadowRoot.innerHTML = `
       <style>${styles}</style>
       
-      <div class="card">
-        <div class="card-title">${this.escapeHtml(this._document.name)}</div>
-        <div class="card-version">Version ${this._document.version}</div>
+      <article 
+        aria-labelledby="title-${this._document.id}"
+        class="card" 
+        role="article"
+        tabindex="0"
+      >
+        <header class="card-header">
+          <h3 class="card-title" id="title-${this._document.id}">
+            ${this.escapeHtml(this._document.name)}
+          </h3>
+          <div class="card-meta">
+            <span aria-label="Version ${this._document.version}" class="card-version">
+              Version ${this._document.version}
+            </span>
+            <time 
+              class="card-date"
+              datetime="${this._document.createdAt.toISOString()}" 
+              title="Created on ${formattedDate}"
+            >
+              ${formattedDate}
+            </time>
+          </div>
+        </header>
         
-        <div class="card-section">
-          <div class="section-title">Contributors</div>
-          <div class="contributor-list">
+        <section class="card-section">
+          <h4 class="section-title">Contributors</h4>
+          <div 
+            aria-label="${this._document.contributors.length} contributors"
+            class="contributor-list" 
+            role="list"
+          >
             ${this.renderContributors(this._document)}
           </div>
-        </div>
+        </section>
         
-        <div class="card-section">
-          <div class="section-title">Attachments</div>
-          <div class="attachment-list">
+        <section class="card-section">
+          <h4 class="section-title">Attachments</h4>
+          <div 
+            aria-label="${this._document.attachments.length} attachments"
+            class="attachment-list" 
+            role="list"
+          >
             ${this.renderAttachments(this._document)}
           </div>
-        </div>
-      </div>
+        </section>
+      </article>
     `;
   }
 
   private renderContributors(document: Document): string {
+    if (document.contributors.length === 0) {
+      return '<div class="empty-state" role="listitem">No contributors</div>';
+    }
+
     return document.contributors
-      .map(contributor => `<div>${this.escapeHtml(contributor.name)}</div>`)
+      .map(contributor => `
+        <div class="contributor-item" role="listitem">
+          <span class="contributor-name">${this.escapeHtml(contributor.name)}</span>
+        </div>
+      `)
       .join('');
   }
 
   private renderAttachments(document: Document): string {
+    if (document.attachments.length === 0) {
+      return '<div class="empty-state" role="listitem">No attachments</div>';
+    }
+
     return document.attachments
-      .map(attachment => `<div>${this.escapeHtml(attachment)}</div>`)
+      .map(attachment => `
+        <div class="attachment-item" role="listitem">
+          <span class="attachment-name">${this.escapeHtml(attachment)}</span>
+        </div>
+      `)
       .join('');
   }
 

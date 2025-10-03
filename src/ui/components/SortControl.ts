@@ -23,13 +23,20 @@ export class SortControl extends HTMLElement {
       <style>${styles}</style>
       
       <div class="sort-control">
-        <label for="sortBy">Sort by:</label>
-        <select id="sortBy">
-          <option value="">Select one...</option>
-          <option value="name">Name</option>
-          <option value="version">Version</option>
-          <option value="createdAt">Created Date</option>
+        <label for="sortBy">Sort documents by:</label>
+        <select 
+          aria-describedby="sort-description"
+          id="sortBy" 
+          title="Choose how to sort the document list"
+        >
+          <option value="">Choose sorting option...</option>
+          <option value="name">Name (A-Z)</option>
+          <option value="version">Version number</option>
+          <option value="createdAt">Creation date (newest first)</option>
         </select>
+        <div class="sr-only" id="sort-description">
+          Select how you want to sort the documents in the list
+        </div>
       </div>
     `;
   }
