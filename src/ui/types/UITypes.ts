@@ -5,3 +5,8 @@ export interface DocumentFormData {
   contributors: string[];
   name: string;
 }
+
+export interface DocumentFormElement extends HTMLElement {
+  show(): void;
+  close(): void;
+}

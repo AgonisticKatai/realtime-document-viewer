@@ -1,1 +1,1 @@
-export type { ViewMode, DocumentFormData } from './UITypes';
+export type { ViewMode, DocumentFormData, DocumentFormElement } from './UITypes';

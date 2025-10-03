@@ -4,7 +4,7 @@ import { UIRenderer } from './UIRenderer';
 import { Document } from '../domain/models/Document';
 
 import type { SortBy } from '../domain/types';
-import type { ViewMode } from '../ui/types';
+import type { ViewMode, DocumentFormElement } from '../ui/types';
 
 export class AppController {
   private documentService: DocumentService;
@@ -49,7 +49,7 @@ export class AppController {
   }
 
   private showCreateDocumentForm(): void {
-    const form = document.createElement('document-form');
+    const form = document.createElement('document-form') as DocumentFormElement;
     document.body.appendChild(form);
 
     form.addEventListener('documentsubmit', ((event: CustomEvent) => {
@@ -67,12 +67,14 @@ export class AppController {
       }
 
       this.renderDocuments();
-      document.body.removeChild(form);
+      form.close();
     }) as EventListener);
 
     form.addEventListener('close', () => {
       document.body.removeChild(form);
     });
+
+    form.show();
   }
 
   private setupNotifications(): void {

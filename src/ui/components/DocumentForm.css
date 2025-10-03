@@ -1,25 +1,22 @@
 @import url('../../styles/component-theme.css');
 
-.modal-overlay {
-  align-items: center;
-  background: rgb(0 0 0 / 0.5);
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100vw;
-  z-index: 1000;
-}
-
-.modal {
+dialog {
   background: var(--color-surface);
+  border: none;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
+  left: 50%;
+  margin: 0;
   max-width: 500px;
   padding: var(--space-6);
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 90%;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
 }
 
 .modal-header {

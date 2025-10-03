@@ -21,31 +21,20 @@ export class DocumentForm extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>${styles}</style>
       
-      <div 
-        aria-describedby="modal-description"
-        aria-labelledby="modal-title"
-        aria-modal="true"
-        class="modal-overlay" 
-        role="dialog" 
-      >
-        <div class="modal">
-          <div class="modal-header">
-            <h2 class="modal-title" id="modal-title">Create New Document</h2>
-            <button 
-              aria-label="Close dialog"
-              class="close-button" 
-              title="Cancel and close form"
-              type="button" 
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          
-          <div class="sr-only" id="modal-description">
-            Form to create a new document with name, contributors, and attachments
-          </div>
-          
-          <form aria-label="New document form" novalidate>
+      <dialog aria-labelledby="modal-title">
+        <div class="modal-header">
+          <h2 class="modal-title" id="modal-title">Create New Document</h2>
+          <button 
+            aria-label="Close dialog"
+            class="close-button" 
+            title="Cancel and close form"
+            type="button" 
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <form aria-label="New document form" novalidate>
             <div class="form-group">
               <label class="form-label" for="documentName">
                 Document Name 
@@ -116,16 +105,26 @@ export class DocumentForm extends HTMLElement {
               </div>
             </div>
           </form>
-        </div>
-      </div>
+        </dialog>
     `;
   }
 
+  // Public methods to control dialog
+  show(): void {
+    const dialog = this.shadowRoot?.querySelector('dialog');
+    dialog?.showModal();
+  }
+
+  close(): void {
+    const dialog = this.shadowRoot?.querySelector('dialog');
+    dialog?.close();
+  }
+
   private attachEventListeners(): void {
+    const dialog = this.shadowRoot?.querySelector('dialog');
     const formElement = this.shadowRoot?.querySelector('form');
     const closeButtons = this.shadowRoot?.querySelectorAll('.close-button, .close-btn');
     const nameInput = this.shadowRoot?.querySelector('#documentName') as HTMLInputElement;
-    const modalOverlay = this.shadowRoot?.querySelector('.modal-overlay');
 
     formElement?.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -134,8 +133,14 @@ export class DocumentForm extends HTMLElement {
 
     closeButtons?.forEach(button => {
       button.addEventListener('click', () => {
+        dialog?.close();
         this.dispatchEvent(new CustomEvent('close'));
       });
+    });
+
+    // Dialog native close event
+    dialog?.addEventListener('close', () => {
+      this.dispatchEvent(new CustomEvent('close'));
     });
 
     // Real-time validation
@@ -147,56 +152,11 @@ export class DocumentForm extends HTMLElement {
       this.clearValidationError();
     });
 
-    // Keyboard navigation
-    modalOverlay?.addEventListener('keydown', (event) => {
-      this.handleKeydown(event as KeyboardEvent);
-    });
-
-    // Focus management
+    // Focus management when dialog opens
     this.focusFirstInput();
   }
 
-  private handleKeydown(event: KeyboardEvent): void {
-    // Escape key closes modal
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      this.dispatchEvent(new CustomEvent('close'));
-      return;
-    }
-
-    // Tab key management for focus trapping
-    if (event.key === 'Tab') {
-      this.handleTabKey(event);
-    }
-  }
-
-  private handleTabKey(event: KeyboardEvent): void {
-    const focusableElements = this.shadowRoot?.querySelectorAll(
-      'input, textarea, button, [tabindex]:not([tabindex="-1"])'
-    );
-
-    if (!focusableElements || focusableElements.length === 0) return;
-
-    const firstElement = focusableElements[0] as HTMLElement;
-    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
-    if (event.shiftKey) {
-      // Shift + Tab: backward navigation
-      if (document.activeElement === firstElement) {
-        event.preventDefault();
-        lastElement.focus();
-      }
-    } else {
-      // Tab: forward navigation
-      if (document.activeElement === lastElement) {
-        event.preventDefault();
-        firstElement.focus();
-      }
-    }
-  }
-
   private focusFirstInput(): void {
-    // Focus the first input after a short delay to ensure the modal is rendered
     setTimeout(() => {
       const nameInput = this.shadowRoot?.querySelector('#documentName') as HTMLInputElement;
       nameInput?.focus();
@@ -239,9 +199,7 @@ export class DocumentForm extends HTMLElement {
   }
 
   private handleSubmit(): void {
-    // Validate form before submission
     if (!this.validateName()) {
-      // Focus on the invalid field
       const nameInput = this.shadowRoot?.querySelector('#documentName') as HTMLInputElement;
       nameInput?.focus();
       return;
