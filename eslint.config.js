@@ -19,7 +19,6 @@ export default [
       'import-x': importPlugin
     },
     rules: {
-      // TypeScript specific rules
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -31,17 +30,23 @@ export default [
       '@typescript-eslint/prefer-nullish-coalescing': 'error',
       '@typescript-eslint/prefer-optional-chain': 'error',
       
-      // Import rules - alphabetical ordering
       'import-x/order': ['error', {
         'groups': [
           'builtin',
           'external',
           'internal',
-          'parent',
-          'sibling',
-          'index'
+          ['parent', 'sibling'],
+          'index',
+          'object',
+          'type'
         ],
-        'newlines-between': 'never',
+        'pathGroups': [
+          {
+            'pattern': '@/**',
+            'group': 'internal'
+          }
+        ],
+        'newlines-between': 'always',
         'alphabetize': {
           'order': 'asc',
           'caseInsensitive': true
@@ -50,7 +55,6 @@ export default [
       'import-x/no-duplicates': 'error',
       'import-x/newline-after-import': 'error',
       
-      // Code style
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-const': 'error',
       'no-var': 'error',
@@ -60,7 +64,6 @@ export default [
       'no-nested-ternary': 'error',
       'no-unneeded-ternary': 'error',
       
-      // Spacing and formatting
       'array-bracket-spacing': ['error', 'never'],
       'object-curly-spacing': ['error', 'always'],
       'comma-dangle': ['error', 'never'],
@@ -73,7 +76,6 @@ export default [
       'comma-spacing': ['error', { before: false, after: true }],
       'key-spacing': ['error', { beforeColon: false, afterColon: true }],
       
-      // Best practices
       'eqeqeq': ['error', 'always'],
       'no-else-return': 'error',
       'no-implicit-coercion': 'error',
