@@ -40,27 +40,30 @@ describe('SortDocumentsUseCase', () => {
   });
 
   it('should sort documents by name', () => {
-    const sorted = useCase.execute({ documents, sortBy: 'name' });
+    const [error, sorted] = useCase.execute({ documents, sortBy: 'name' });
 
-    expect(sorted[0].name).toBe('Alpha Document');
-    expect(sorted[1].name).toBe('Beta Document');
-    expect(sorted[2].name).toBe('Zebra Document');
+    expect(error).toBeNull();
+    expect(sorted?.[0].name).toBe('Alpha Document');
+    expect(sorted?.[1].name).toBe('Beta Document');
+    expect(sorted?.[2].name).toBe('Zebra Document');
   });
 
   it('should sort documents by version', () => {
-    const sorted = useCase.execute({ documents, sortBy: 'version' });
+    const [error, sorted] = useCase.execute({ documents, sortBy: 'version' });
 
-    expect(sorted[0].version).toBe(1);
-    expect(sorted[1].version).toBe(2);
-    expect(sorted[2].version).toBe(3);
+    expect(error).toBeNull();
+    expect(sorted?.[0].version).toBe(1);
+    expect(sorted?.[1].version).toBe(2);
+    expect(sorted?.[2].version).toBe(3);
   });
 
   it('should sort documents by createdAt', () => {
-    const sorted = useCase.execute({ documents, sortBy: 'createdAt' });
+    const [error, sorted] = useCase.execute({ documents, sortBy: 'createdAt' });
 
-    expect(sorted[0].createdAt.getTime()).toBe(new Date('2024-01-10').getTime());
-    expect(sorted[1].createdAt.getTime()).toBe(new Date('2024-01-15').getTime());
-    expect(sorted[2].createdAt.getTime()).toBe(new Date('2024-01-20').getTime());
+    expect(error).toBeNull();
+    expect(sorted?.[0].createdAt.getTime()).toBe(new Date('2024-01-10').getTime());
+    expect(sorted?.[1].createdAt.getTime()).toBe(new Date('2024-01-15').getTime());
+    expect(sorted?.[2].createdAt.getTime()).toBe(new Date('2024-01-20').getTime());
   });
 
   it('should not mutate original array', () => {
@@ -69,5 +72,12 @@ describe('SortDocumentsUseCase', () => {
     useCase.execute({ documents, sortBy: 'name' });
 
     expect(documents.map(doc => doc.id)).toEqual(originalOrder);
+  });
+
+  it('should handle empty array', () => {
+    const [error, sorted] = useCase.execute({ documents: [], sortBy: 'name' });
+
+    expect(error).toBeNull();
+    expect(sorted).toEqual([]);
   });
 });
