@@ -2,9 +2,10 @@
 
 .view-toggle {
   background: var(--color-surface);
-  border: 1px solid oklch(85% 0% 0deg);
+  border: 1px solid color-mix(in oklch, var(--color-text-tertiary) 40%, transparent);
   border-radius: var(--radius-md);
   display: flex;
+  overflow: hidden;
   padding: 0.25rem;
 
   & button {
@@ -17,27 +18,42 @@
     display: flex;
     justify-content: center;
     padding: var(--space-2);
-    transition: all 0.2s;
+    position: relative;
+    transition: all 0.3s ease;
 
-    &:hover {
-      background: oklch(95% 0% 0deg);
+    &:hover:not(.active) {
+      background: var(--color-hover-overlay);
       color: var(--color-text-primary);
+      transform: scale(1.05);
     }
 
     &.active {
-      background: var(--color-primary);
+      background: linear-gradient(135deg, 
+        var(--color-primary) 0%, 
+        color-mix(in oklch, var(--color-primary) 85%, oklch(30% 20% 280deg)) 100%);
+      box-shadow: 
+        0 2px 8px color-mix(in oklch, var(--color-primary) 25%, transparent),
+        inset 0 1px 0 color-mix(in oklch, white 15%, transparent);
       color: white;
     }
 
     &:focus {
-      box-shadow: 0 0 0 4px oklch(60% 0.15 240deg / 0.3);
-      outline: 2px solid oklch(60% 0.15 240deg);
-      outline-offset: 2px;
+      box-shadow: 0 0 0 3px var(--color-focus-ring);
+      outline: none;
+    }
+
+    &:active {
+      transform: scale(0.95);
     }
 
     & svg {
       height: 1.25rem;
+      transition: transform 0.2s ease;
       width: 1.25rem;
+    }
+
+    &:hover svg {
+      transform: scale(1.1);
     }
   }
 }
