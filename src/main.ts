@@ -41,9 +41,16 @@ async function fetchDocuments() {
 }
 
 function renderDocuments({ sortBy }: { sortBy?: SortBy } = {}) {
-  const documents = sortBy
-    ? sortDocumentsUseCase.execute({ documents: allDocuments, sortBy })
-    : allDocuments;
+  let documents = allDocuments;
+
+  if (sortBy) {
+    const [error, sortedDocs] = sortDocumentsUseCase.execute({ documents: allDocuments, sortBy });
+    if (error) {
+      console.error('Error sorting documents:', error);
+      return;
+    }
+    documents = sortedDocs as Document[];
+  }
 
   const container = document.getElementById('documentList');
   if (!container) {
@@ -72,13 +79,18 @@ function showCreateDocumentForm() {
   form.addEventListener('documentsubmit', ((event: CustomEvent) => {
     const { name, contributors, attachments } = event.detail;
 
-    const newDocument = createDocumentUseCase.execute({
+    const [error, newDocument] = createDocumentUseCase.execute({
       attachments,
       contributors,
       name
     });
 
-    allDocuments = [newDocument, ...allDocuments];
+    if (error) {
+      console.error('Error creating document:', error);
+      return;
+    }
+
+    allDocuments = [newDocument as Document, ...allDocuments];
     renderDocuments();
 
     document.body.removeChild(form);
