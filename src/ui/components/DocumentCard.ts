@@ -1,9 +1,10 @@
 import { Document } from '../../domain/models/Document';
+import type { ViewMode } from '../types';
 import styles from './DocumentCard.css?inline';
 
 export class DocumentCard extends HTMLElement {
   private _document: Document | null = null;
-  private _mode: 'list' | 'grid' = 'grid';
+  private _mode: ViewMode = 'grid';
 
   constructor() {
     super();
@@ -23,11 +24,11 @@ export class DocumentCard extends HTMLElement {
     this.render();
   }
 
-  get mode(): 'list' | 'grid' {
+  get mode(): ViewMode {
     return this._mode;
   }
 
-  set mode(value: 'list' | 'grid') {
+  set mode(value: ViewMode) {
     this._mode = value;
     this.render();
   }
