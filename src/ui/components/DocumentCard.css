@@ -9,11 +9,27 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: var(--space-4);
+  transition: all 0.2s ease;
 
   &:focus {
     box-shadow: 0 0 0 4px oklch(60% 0.15 240deg / 0.2);
     outline: 2px solid oklch(60% 0.15 240deg);
     outline-offset: 2px;
+  }
+
+  &:has(.attachment-item) {
+    background: color-mix(in srgb, oklch(60% 0.15 180deg) 2%, var(--color-surface));
+    border-left: 4px solid oklch(60% 0.15 180deg);
+  }
+
+  &:has(.contributor-item:nth-child(3)) {
+    background: color-mix(in srgb, oklch(60% 0.15 60deg) 2%, var(--color-surface));
+    border-left: 4px solid oklch(60% 0.15 60deg);
+  }
+
+  &:has(.empty-state) {
+    background: color-mix(in srgb, var(--color-text-tertiary) 1%, var(--color-surface));
+    opacity: 0.7;
   }
 }
 
