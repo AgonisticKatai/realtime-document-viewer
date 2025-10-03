@@ -29,21 +29,34 @@ describe('HttpDocumentRepository', () => {
       ok: true
     });
 
-    const documents = await repository.getAll();
+    const [err, documents] = await repository.getAll();
 
+    expect(err).toBeNull();
     expect(documents).toHaveLength(1);
-    expect(documents[0].id).toBe('d1');
-    expect(documents[0].name).toBe('Test Document');
-    expect(documents[0].version).toBe(1);
+    expect(documents?.[0].id).toBe('d1');
+    expect(documents?.[0].name).toBe('Test Document');
+    expect(documents?.[0].version).toBe(1);
     expect(fetch).toHaveBeenCalledWith('http://localhost:8080/documents');
   });
 
-  it('should throw error when fetch fails', async () => {
+  it('should return error when fetch fails', async () => {
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 500
     });
 
-    await expect(repository.getAll()).rejects.toThrow('Failed to fetch documents');
+    const [err, documents] = await repository.getAll();
+
+    expect(err).toBe('Failed to fetch documents');
+    expect(documents).toBeNull();
+  });
+
+  it('should return error when network fails', async () => {
+    globalThis.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
+
+    const [err, documents] = await repository.getAll();
+
+    expect(err).toBe('Connection error');
+    expect(documents).toBeNull();
   });
 });

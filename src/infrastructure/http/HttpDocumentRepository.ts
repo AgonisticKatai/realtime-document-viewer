@@ -1,21 +1,27 @@
 import { DocumentDTO } from './dtos/DocumentDTO';
 import { DocumentMapper } from './mappers/DocumentMapper';
+import { InlineError, error, success } from '../../domain/errors';
 import { Document } from '../../domain/models/Document';
 import { DocumentRepository } from '../../domain/repositories/DocumentRepository';
 
 export class HttpDocumentRepository implements DocumentRepository {
   constructor(private readonly config: { baseUrl: string }) {}
 
-  async getAll(): Promise<Document[]> {
-    const response = await fetch(`${this.config.baseUrl}/documents`);
+  async getAll(): Promise<InlineError<Document[]>> {
+    try {
+      const response = await fetch(`${this.config.baseUrl}/documents`);
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch documents');
+      if (!response.ok) {
+        return error('Failed to fetch documents');
+      }
+
+      const documentsDto: DocumentDTO[] = await response.json();
+      const documents = this.mapDocuments({ documentsDto });
+
+      return success(documents);
+    } catch {
+      return error('Connection error');
     }
-
-    const documentsDto: DocumentDTO[] = await response.json();
-
-    return this.mapDocuments({ documentsDto });
   }
 
   private mapDocuments({ documentsDto }: { documentsDto: DocumentDTO[] }): Document[] {

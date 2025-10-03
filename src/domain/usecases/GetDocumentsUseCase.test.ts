@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
+import { success, error } from '../errors';
 import { GetDocumentsUseCase } from './GetDocumentsUseCase';
 import { Contributor } from '../models/Contributor';
 import { Document } from '../models/Document';
@@ -11,7 +12,7 @@ describe('GetDocumentsUseCase', () => {
 
   beforeEach(() => {
     mockRepository = {
-      getAll: async () => [
+      getAll: async () => success([
         Document.create({
           attachments: [],
           contributors: [Contributor.create({ id: 'c1', name: 'John' })],
@@ -28,17 +29,27 @@ describe('GetDocumentsUseCase', () => {
           name: 'Alpha Document',
           version: 1
         })
-      ]
+      ])
     };
 
     useCase = new GetDocumentsUseCase(mockRepository);
   });
 
   it('should return all documents from repository', async () => {
-    const documents = await useCase.execute();
+    const [err, documents] = await useCase.execute();
 
+    expect(err).toBeNull();
     expect(documents).toHaveLength(2);
-    expect(documents[0].name).toBe('Zebra Document');
-    expect(documents[1].name).toBe('Alpha Document');
+    expect(documents?.[0].name).toBe('Zebra Document');
+    expect(documents?.[1].name).toBe('Alpha Document');
+  });
+
+  it('should return error when repository fails', async () => {
+    mockRepository.getAll = async () => error('Connection failed');
+
+    const [err, documents] = await useCase.execute();
+
+    expect(err).toBe('Connection failed');
+    expect(documents).toBeNull();
   });
 });
