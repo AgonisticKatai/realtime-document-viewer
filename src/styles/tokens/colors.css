@@ -11,4 +11,32 @@
   --color-text-primary: oklch(25% 2% 250deg);
   --color-text-secondary: oklch(50% 2% 250deg);
   --color-text-tertiary: oklch(65% 2% 250deg);
+
+  /* Dynamic colors */
+  --color-primary-subtle: color-mix(in oklch, var(--color-primary) 10%, transparent);
+  --color-primary-muted: color-mix(in oklch, var(--color-primary) 20%, var(--color-surface));
+  --color-primary-strong: color-mix(in oklch, var(--color-primary) 80%, oklch(30% 25% 250deg));
+  
+  /* Success colors family */
+  --color-success: oklch(70% 15% 150deg);
+  --color-success-subtle: color-mix(in oklch, var(--color-success) 8%, transparent);
+  --color-success-muted: color-mix(in oklch, var(--color-success) 15%, var(--color-surface));
+  --color-success-strong: color-mix(in oklch, var(--color-success) 85%, oklch(40% 20% 150deg));
+  
+  /* Warning colors family */
+  --color-warning: oklch(75% 15% 60deg);
+  --color-warning-subtle: color-mix(in oklch, var(--color-warning) 8%, transparent);
+  --color-warning-muted: color-mix(in oklch, var(--color-warning) 15%, var(--color-surface));
+  --color-warning-strong: color-mix(in oklch, var(--color-warning) 85%, oklch(45% 20% 60deg));
+  
+  /* Error colors family */
+  --color-error: oklch(65% 15% 25deg);
+  --color-error-subtle: color-mix(in oklch, var(--color-error) 8%, transparent);
+  --color-error-muted: color-mix(in oklch, var(--color-error) 15%, var(--color-surface));
+  --color-error-strong: color-mix(in oklch, var(--color-error) 85%, oklch(35% 20% 25deg));
+
+  /* Interactive states */
+  --color-hover-overlay: color-mix(in srgb, var(--color-text-primary) 5%, transparent);
+  --color-active-overlay: color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+  --color-focus-ring: color-mix(in oklch, var(--color-primary) 40%, transparent);
 }
