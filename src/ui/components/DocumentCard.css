@@ -18,18 +18,34 @@
   }
 
   &:has(.attachment-item) {
-    background: color-mix(in srgb, oklch(60% 0.15 180deg) 2%, var(--color-surface));
-    border-left: 4px solid oklch(60% 0.15 180deg);
+    background: var(--color-success-subtle);
+    border-left: 4px solid var(--color-success);
   }
 
   &:has(.contributor-item:nth-child(3)) {
-    background: color-mix(in srgb, oklch(60% 0.15 60deg) 2%, var(--color-surface));
-    border-left: 4px solid oklch(60% 0.15 60deg);
+    background: var(--color-warning-subtle);
+    border-left: 4px solid var(--color-warning);
   }
 
   &:has(.empty-state) {
-    background: color-mix(in srgb, var(--color-text-tertiary) 1%, var(--color-surface));
-    opacity: 0.7;
+    background: color-mix(in oklch, var(--color-text-tertiary) 3%, var(--color-surface));
+    opacity: 0.8;
+  }
+
+  &:hover {
+    background: color-mix(in oklch, var(--color-primary) 3%, var(--color-surface));
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+  }
+
+  &:hover:has(.attachment-item) {
+    background: color-mix(in oklch, var(--color-success) 8%, var(--color-surface));
+    border-left-color: var(--color-success-strong);
+  }
+
+  &:hover:has(.contributor-item:nth-child(3)) {
+    background: color-mix(in oklch, var(--color-warning) 8%, var(--color-surface));
+    border-left-color: var(--color-warning-strong);
   }
 }
 
