@@ -1,6 +1,5 @@
+import type { ViewMode } from '../types';
 import styles from './ViewToggle.css?inline';
-
-export type ViewMode = 'list' | 'grid';
 
 export class ViewToggle extends HTMLElement {
   private _mode: ViewMode = 'grid';
