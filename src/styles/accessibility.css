@@ -1,0 +1,73 @@
+/* Screen reader only content */
+.sr-only {
+  border: 0;
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* Focus management */
+*:focus {
+  outline: 2px solid oklch(60% 0.15 240deg);
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid oklch(60% 0.15 240deg);
+  outline-offset: 2px;
+}
+
+/* Skip links */
+.skip-link {
+  background: oklch(20% 0.05 240deg);
+  border-radius: 4px;
+  color: oklch(98% 0.01 240deg);
+  font-size: 0.875rem;
+  left: 6px;
+  padding: 8px;
+  position: absolute;
+  text-decoration: none;
+  top: -40px;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* High contrast support - Generic for all components */
+@media (prefers-contrast: more) {
+  * {
+    border-color: oklch(0% 0 0deg);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+  }
+}
+
+/* Font display optimization */
+@media (prefers-reduced-data: reduce) {
+  * {
+    font-display: swap;
+  }
+}
+
+/* Global accessibility utilities and base styles only */
