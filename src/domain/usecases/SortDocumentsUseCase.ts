@@ -1,6 +1,5 @@
 import { Document } from '../models/Document';
-
-export type SortBy = 'name' | 'version' | 'createdAt';
+import type { SortBy } from '../types';
 
 export class SortDocumentsUseCase {
   execute({ documents, sortBy }: { documents: Document[]; sortBy: SortBy }): Document[] {
