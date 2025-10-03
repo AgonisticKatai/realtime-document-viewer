@@ -13,23 +13,24 @@
 
   & select {
     background: var(--color-surface);
-    border: 1px solid oklch(85% 0% 0deg);
+    border: 1px solid color-mix(in oklch, var(--color-text-tertiary) 40%, transparent);
     border-radius: var(--radius-md);
     color: var(--color-text-primary);
     cursor: pointer;
     font-size: var(--font-size-sm);
     padding: var(--space-2) var(--space-3);
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
 
     &:focus {
+      background: color-mix(in oklch, var(--color-primary) 2%, var(--color-surface));
       border-color: var(--color-primary);
-      box-shadow: 0 0 0 4px oklch(60% 0.15 240deg / 0.3);
-      outline: 2px solid oklch(60% 0.15 240deg);
-      outline-offset: 2px;
+      box-shadow: 0 0 0 3px var(--color-focus-ring);
+      outline: none;
     }
 
     &:hover {
-      border-color: oklch(75% 0% 0deg);
+      background: var(--color-hover-overlay);
+      border-color: color-mix(in oklch, var(--color-text-secondary) 60%, transparent);
     }
   }
 }
