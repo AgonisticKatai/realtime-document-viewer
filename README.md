@@ -4,30 +4,102 @@ A scalable document management application built with vanilla TypeScript, Web Co
 
 ## 🏗️ Architecture
 
-### 🔷 Hexagonal Architecture (Ports & Adapters)
+### 🔷 **Hexagonal Architecture + Service Layer**
 
-The project follows a clean hexagonal architecture separating business logic from external dependencies:
+The application combines **Hexagonal Architecture** (Ports & Adapters) with a **Service Layer** for optimal separation of concerns:
 
-- **domain/** - Business logic (framework-agnostic)
-  - models/ - Entities: Document, Contributor
-  - repositories/ - Repository interfaces (ports)
-  - services/ - Service interfaces
-  - usecases/ - Business use cases
-- **infrastructure/** - External adapters
-  - http/ - HTTP API integration
-  - websocket/ - WebSocket integration
-- **ui/** - Presentation layer
-  - components/ - Web Components
+```
+src/
+├── main.ts                    # 📍 Application entry point (10 lines)
+├── services/                  # 🎛️ Application Services Layer
+│   ├── AppController.ts       # 🎯 Main application orchestrator
+│   ├── DocumentService.ts     # 📄 Document business logic facade
+│   ├── UIRenderer.ts          # 🎨 UI rendering service
+│   └── NotificationManager.ts # 🔔 Notification handling
+├── domain/                    # 🔷 HEXAGON CORE - Business Logic
+│   ├── models/               # 📝 Entities: Document, Contributor
+│   ├── repositories/         # 🔌 Repository interfaces (PRIMARY PORTS)
+│   ├── usecases/            # ⚡ Business use cases
+│   ├── errors/              # 🚨 Error handling system
+│   └── types/               # 📋 Domain types
+├── infrastructure/           # 🔧 SECONDARY ADAPTERS
+│   ├── http/                # 🌐 HTTP API adapter
+│   └── websocket/           # ⚡ WebSocket adapter
+└── ui/                      # 🎨 PRIMARY ADAPTERS
+    └── components/          # 🧩 Web Components (UI adapters)
+```
+
+### 🔷 **Hexagonal Architecture Layers**
+
+#### 🎯 **Core Domain (Hexagon Center)**
+- **Models**: Pure business entities (Document, Contributor)
+- **Use Cases**: Business logic operations
+- **Repository Interfaces**: Ports for data access
+- **Types & Errors**: Domain definitions
+
+#### 🔌 **Primary Ports & Adapters** 
+- **Ports**: Repository interfaces, Service interfaces
+- **Adapters**: Web Components, Service Layer
+
+#### 🔧 **Secondary Ports & Adapters**
+- **Ports**: Repository interfaces (implemented by infrastructure)
+- **Adapters**: HttpDocumentRepository, WebSocketNotificationService
+
+### 🎛️ **Service Layer Architecture**
+
+#### 📍 **AppController** - Application Orchestrator
+- Coordinates all application services
+- Manages application lifecycle and initialization
+- Handles high-level event routing and coordination
+
+#### 📄 **DocumentService** - Document Management
+- Encapsulates all document-related business logic
+- Manages document state and operations (CRUD, sorting)
+- Bridges domain use cases with application layer
+
+#### 🎨 **UIRenderer** - Presentation Service
+- Handles all DOM manipulation and rendering
+- Manages view modes and UI state
+- Provides clean interface for UI operations
+
+#### 🔔 **NotificationManager** - Real-time Communication
+- Manages WebSocket connections and notifications
+- Handles notification display and lifecycle
+- Abstracts notification infrastructure
+
+### 🚨 **Error Handling System**
+
+The application uses a functional **InlineError pattern** inspired by Go:
+
+```typescript
+// Simple, elegant error handling
+export type InlineError<T> = [string | null, T | null];
+
+// Usage examples
+const [error, documents] = await documentService.fetchDocuments();
+if (error) {
+  console.error('Failed to load:', error);
+  return;
+}
+// Use documents safely
+```
+
+**Benefits:**
+- ✅ **Explicit error handling** - Errors are part of the type system
+- ✅ **No exceptions** - Predictable control flow
+- ✅ **Simple & readable** - Easy to understand and use
+- ✅ **Composable** - Errors propagate naturally through the call stack
 
 ### 🔑 Key Architectural Decisions
 
+- **Service-oriented design**: Clear separation between orchestration, business logic, and presentation
+- **Functional error handling**: InlineError pattern for explicit, composable error management
 - **No frameworks**: Vanilla TypeScript with Web Components for maximum control and learning
 - **TDD**: Test-driven development for domain and infrastructure layers
 - **Client-side sorting**: Single API call, all operations in memory for performance
 - **Immutable entities**: Domain models are readonly after creation
 - **Factory pattern**: Controlled entity creation with validation
 - **Design System**: Modern CSS architecture with centralized theme, tokens, and Web Component styling
-- **CSS tokens**: Custom properties, oklch colors, fluid scaling with clamp(), native CSS nesting
 
 ## 🛠️ Tech Stack
 
@@ -195,16 +267,52 @@ Coverage focuses on business logic and critical paths. UI components have basic 
 
 ## 🤔 Project Decisions
 
+### 🎯 Why Service-Oriented Architecture?
+
+**From monolithic main.ts (158 lines) to clean services:**
+- 📍 **AppController**: Orchestrates the entire application
+- 📄 **DocumentService**: Encapsulates all document logic  
+- 🎨 **UIRenderer**: Handles presentation concerns
+- 🔔 **NotificationManager**: Manages real-time communication
+
+**Benefits:**
+- ✅ **Single Responsibility**: Each service has one clear purpose
+- 🧪 **Testable**: Services can be tested independently
+- 🔄 **Maintainable**: Changes are localized to specific services
+- 📖 **Readable**: Clean, focused code that's easy to understand
+
+### 🚨 Why InlineError Pattern?
+
+**Simple functional error handling:**
+```typescript
+const [error, data] = await service.operation();
+if (error) { /* handle error */ }
+// Use data safely
+```
+
+**Instead of try/catch:**
+- ✅ **Explicit**: Errors are part of the type system
+- 🎯 **Predictable**: No hidden exceptions
+- 🔄 **Composable**: Errors propagate naturally
+- 📖 **Simple**: Easy to read and understand
+
 ### 🎯 Why Vanilla TypeScript?
 
 Demonstrates deep understanding of web standards and JavaScript fundamentals without framework abstraction.
 
-### 🔷 Why Hexagonal Architecture?
+### 🔷 Why Hexagonal Architecture + Services?
 
+**Hexagonal Architecture (Ports & Adapters):**
 - ✅ Clean separation of concerns
-- 🧪 Testable business logic
+- 🧪 Testable business logic  
 - 🔄 Easy to swap implementations
 - 🌐 Framework-agnostic domain
+
+**+ Service Layer Benefits:**
+- 🎯 **Facade Pattern**: Services simplify complex domain interactions
+- 🎛️ **Orchestration**: AppController coordinates without business logic
+- 📄 **State Management**: DocumentService manages application state
+- 🎨 **Presentation Logic**: UIRenderer handles view concerns
 
 ### 🧩 Why Web Components?
 
@@ -232,11 +340,74 @@ The API returns random documents on each request. Client-side sorting:
 ### 🎯 Why Separate Use Cases?
 
 Following Single Responsibility Principle:
-- GetDocumentsUseCase - Fetch from API
-- SortDocumentsUseCase - Sort in memory
-- CreateDocumentUseCase - Create new documents
+- **GetDocumentsUseCase** - Fetch from API with error handling
+- **SortDocumentsUseCase** - Sort in memory with validation
+- **CreateDocumentUseCase** - Create new documents with validation
 
 Each use case is testable, reusable, and maintainable.
+
+## 🔄 Architecture Evolution
+
+### 📈 **From Monolith to Services**
+
+**Before: Monolithic main.ts (158 lines)**
+```typescript
+// ❌ Everything mixed together
+let allDocuments = [];
+let currentViewMode = 'grid';
+const sortDocumentsUseCase = new SortDocumentsUseCase();
+// ... 150+ lines of mixed concerns
+```
+
+**After: Clean Service Architecture (10 lines main.ts)**
+```typescript
+// ✅ Clean separation
+import { AppController } from './services/AppController';
+import './styles/main.css';
+// Component imports...
+
+const appController = new AppController();
+appController.init();
+```
+
+### 🎯 **Refactoring Benefits Achieved**
+
+| Aspect | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| **Lines in main.ts** | 158 lines | 10 lines | 📉 **94% reduction** |
+| **Responsibilities** | Mixed (7+ concerns) | Single (initialization) | 🎯 **Clear SRP** |
+| **Testability** | Difficult | Each service isolated | ✅ **Fully testable** |
+| **Maintainability** | Monolithic changes | Localized changes | 🔧 **Easy maintenance** |
+| **Readability** | Complex, nested logic | Clean, focused services | 📖 **Highly readable** |
+
+### 🏗️ **Service Responsibilities**
+
+```typescript
+// 🎛️ AppController - Application orchestration
+class AppController {
+  async init() { /* coordinate services */ }
+  private setupEventListeners() { /* handle UI events */ }
+}
+
+// 📄 DocumentService - Business logic
+class DocumentService {
+  async fetchDocuments() { /* API calls */ }
+  sortDocuments() { /* sorting logic */ }
+  createDocument() { /* creation logic */ }
+}
+
+// 🎨 UIRenderer - Presentation
+class UIRenderer {
+  renderDocuments() { /* DOM manipulation */ }
+  setViewMode() { /* view state */ }
+}
+
+// 🔔 NotificationManager - Real-time communication
+class NotificationManager {
+  connect() { /* WebSocket setup */ }
+  showNotification() { /* toast display */ }
+}
+```
 
 ## 🌐 Browser Support
 
