@@ -61,4 +61,28 @@ describe('DocumentForm', () => {
 
     expect(handler).not.toHaveBeenCalled();
   });
+
+  it('should not show validation errors when close button is clicked', () => {
+    const { shadowRoot } = form;
+    const closeButton = shadowRoot?.querySelector('.close-button') as HTMLButtonElement;
+    const errorElement = shadowRoot?.querySelector('#name-error') as HTMLElement;
+
+    const mockClose = vi.fn();
+    form.close = mockClose;
+
+    closeButton?.click();
+
+    expect(errorElement?.textContent).toBe('');
+    expect(mockClose).toHaveBeenCalled();
+  });
+
+  it('should not validate on blur - only on submit', () => {
+    const { shadowRoot } = form;
+    const nameInput = shadowRoot?.querySelector('#documentName') as HTMLInputElement;
+    const errorElement = shadowRoot?.querySelector('#name-error') as HTMLElement;
+
+    nameInput?.dispatchEvent(new Event('blur'));
+
+    expect(errorElement?.textContent).toBe('');
+  });
 });

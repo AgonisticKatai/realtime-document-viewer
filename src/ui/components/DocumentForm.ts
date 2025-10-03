@@ -109,15 +109,21 @@ export class DocumentForm extends HTMLElement {
     `;
   }
 
-  // Public methods to control dialog
   show(): void {
-    const dialog = this.shadowRoot?.querySelector('dialog');
+    const dialog = this.shadowRoot?.querySelector('dialog') as HTMLDialogElement;
     dialog?.showModal();
   }
 
   close(): void {
-    const dialog = this.shadowRoot?.querySelector('dialog');
+    const dialog = this.shadowRoot?.querySelector('dialog') as HTMLDialogElement;
+    this.resetForm();
     dialog?.close();
+  }
+
+  private resetForm(): void {
+    const formElement = this.shadowRoot?.querySelector('form') as HTMLFormElement;
+    formElement?.reset();
+    this.clearValidationError();
   }
 
   private attachEventListeners(): void {
@@ -132,27 +138,23 @@ export class DocumentForm extends HTMLElement {
     });
 
     closeButtons?.forEach(button => {
-      button.addEventListener('click', () => {
-        dialog?.close();
-        this.dispatchEvent(new CustomEvent('close'));
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.close();
       });
     });
 
-    // Dialog native close event
     dialog?.addEventListener('close', () => {
+      this.resetForm();
       this.dispatchEvent(new CustomEvent('close'));
-    });
-
-    // Real-time validation
-    nameInput?.addEventListener('blur', () => {
-      this.validateName();
     });
 
     nameInput?.addEventListener('input', () => {
       this.clearValidationError();
     });
 
-    // Focus management when dialog opens
     this.focusFirstInput();
   }
 
