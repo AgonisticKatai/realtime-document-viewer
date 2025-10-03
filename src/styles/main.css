@@ -58,3 +58,14 @@ body {
   flex-direction: column;
   gap: var(--space-3);
 }
+
+.notifications {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 400px;
+  position: fixed;
+  right: var(--space-4);
+  top: var(--space-4);
+  z-index: 1000;
+}
