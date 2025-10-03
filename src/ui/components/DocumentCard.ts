@@ -55,13 +55,9 @@ export class DocumentCard extends HTMLElement {
         tabindex="0"
       >
         <header class="card-header">
-          <h3 class="card-title" id="title-${this._document.id}">
-            ${this.escapeHtml(this._document.name)}
-          </h3>
+          <h3 class="card-title" id="title-${this._document.id}">${this.escapeHtml(this._document.name)}</h3>
           <div class="card-meta">
-            <span aria-label="Version ${this._document.version}" class="card-version">
-              Version ${this._document.version}
-            </span>
+            <span aria-label="Version ${this._document.version}" class="card-version">Version ${this._document.version}</span>
             <time 
               class="card-date"
               datetime="${this._document.createdAt.toISOString()}" 
