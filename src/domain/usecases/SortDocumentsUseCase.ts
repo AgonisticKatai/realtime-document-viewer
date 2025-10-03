@@ -1,9 +1,13 @@
+import { InlineError, success } from '../errors';
 import { Document } from '../models/Document';
 
 import type { SortBy } from '../types';
 
 export class SortDocumentsUseCase {
-  execute({ documents, sortBy }: { documents: Document[]; sortBy: SortBy }): Document[] {
+  execute({ documents, sortBy }: { documents: Document[]; sortBy: SortBy }): InlineError<Document[]> {
+    if (!documents || documents.length === 0) {
+      return success([]);
+    }
     const sorted = [...documents];
 
     const sortStrategies = {
@@ -13,6 +17,6 @@ export class SortDocumentsUseCase {
     };
 
     sorted.sort(sortStrategies[sortBy]);
-    return sorted;
+    return success(sorted);
   }
 }
