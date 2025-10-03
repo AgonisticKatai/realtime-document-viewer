@@ -73,6 +73,21 @@ export class NotificationToast extends HTMLElement {
         </button>
       </div>
     `;
+
+    this.setupCloseButton();
+  }
+
+  private setupCloseButton(): void {
+    const closeButton = this.shadowRoot?.querySelector('.toast-close');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        if (this.hideTimeout) {
+          clearTimeout(this.hideTimeout);
+          this.hideTimeout = null;
+        }
+        this.hide();
+      });
+    }
   }
 
   private updateContent({ documentTitle, userName }: ToastData): void {

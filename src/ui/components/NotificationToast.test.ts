@@ -49,4 +49,22 @@ describe('NotificationToast', () => {
 
     expect(toastElement?.classList.contains('show')).toBe(false);
   });
+
+  it('should close when close button is clicked', () => {
+    toast.show({
+      documentTitle: 'Test Document',
+      userName: 'Test User'
+    });
+
+    const { shadowRoot } = toast;
+    const toastElement = shadowRoot?.querySelector('.toast');
+    const closeButton = shadowRoot?.querySelector('.toast-close') as HTMLButtonElement;
+
+    expect(toastElement?.classList.contains('show')).toBe(true);
+    expect(closeButton).toBeTruthy();
+
+    closeButton?.click();
+
+    expect(toastElement?.classList.contains('show')).toBe(false);
+  });
 });
