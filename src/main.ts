@@ -1,17 +1,21 @@
 import { Document } from './domain/models/Document';
+import type { SortBy } from './domain/types';
+import { CreateDocumentUseCase } from './domain/usecases/CreateDocumentUseCase';
 import { GetDocumentsUseCase } from './domain/usecases/GetDocumentsUseCase';
-import { SortBy, SortDocumentsUseCase } from './domain/usecases/SortDocumentsUseCase';
+import { SortDocumentsUseCase } from './domain/usecases/SortDocumentsUseCase';
 import { HttpDocumentRepository } from './infrastructure/http/HttpDocumentRepository';
 import './styles/main.css';
+import './ui/components/AddDocumentCard';
 import { DocumentCard } from './ui/components/DocumentCard';
+import './ui/components/DocumentForm';
 import './ui/components/SortControl';
-import { type ViewMode } from './ui/components/ViewToggle';
+import type { ViewMode } from './ui/types';
 import './ui/components/ViewToggle';
 
 let allDocuments: Document[] = [];
 let currentViewMode: ViewMode = 'grid';
-
 const sortDocumentsUseCase = new SortDocumentsUseCase();
+const createDocumentUseCase = new CreateDocumentUseCase();
 
 async function fetchDocuments() {
   const repository = new HttpDocumentRepository({ baseUrl: 'http://localhost:8080' });
@@ -31,7 +35,6 @@ function renderDocuments({ sortBy }: { sortBy?: SortBy } = {}) {
     : allDocuments;
 
   const container = document.getElementById('documentList');
-
   if (!container) {
     return;
   }
@@ -44,6 +47,34 @@ function renderDocuments({ sortBy }: { sortBy?: SortBy } = {}) {
     card.document = doc;
     card.mode = currentViewMode;
     container.appendChild(card);
+  });
+
+  const addCard = document.createElement('add-document-card');
+  addCard.addEventListener('add', showCreateDocumentForm);
+  container.appendChild(addCard);
+}
+
+function showCreateDocumentForm() {
+  const form = document.createElement('document-form');
+  document.body.appendChild(form);
+
+  form.addEventListener('documentsubmit', ((event: CustomEvent) => {
+    const { name, contributors, attachments } = event.detail;
+
+    const newDocument = createDocumentUseCase.execute({
+      attachments,
+      contributors,
+      name
+    });
+
+    allDocuments = [newDocument, ...allDocuments];
+    renderDocuments();
+
+    document.body.removeChild(form);
+  }) as EventListener);
+
+  form.addEventListener('close', () => {
+    document.body.removeChild(form);
   });
 }
 
