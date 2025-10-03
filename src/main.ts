@@ -45,14 +45,17 @@ function renderDocuments({ sortBy }: { sortBy?: SortBy } = {}) {
 
   if (sortBy) {
     const [error, sortedDocs] = sortDocumentsUseCase.execute({ documents: allDocuments, sortBy });
+
     if (error) {
       console.error('Error sorting documents:', error);
       return;
     }
+
     documents = sortedDocs as Document[];
   }
 
   const container = document.getElementById('documentList');
+
   if (!container) {
     return;
   }
