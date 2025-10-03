@@ -3,6 +3,7 @@
 @import url('./tokens/typography.css');
 @import url('./tokens/shadows.css');
 @import url('./tokens/radius.css');
+@import url('./accessibility.css');
 
 *,
 *::before,
