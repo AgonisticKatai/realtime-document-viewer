@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { DocumentDTO } from '../dtos/DocumentDTO';
+
 import { DocumentMapper } from './DocumentMapper';
+import { DocumentDTO } from '../dtos/DocumentDTO';
 
 describe('DocumentMapper', () => {
   it('should map DTO to Domain entity', () => {

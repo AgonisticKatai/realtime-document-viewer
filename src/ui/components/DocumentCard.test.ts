@@ -1,7 +1,8 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+
+import { DocumentCard } from './DocumentCard';
 import { Contributor } from '../../domain/models/Contributor';
 import { Document } from '../../domain/models/Document';
-import { DocumentCard } from './DocumentCard';
 
 describe('DocumentCard', () => {
   let card: DocumentCard;

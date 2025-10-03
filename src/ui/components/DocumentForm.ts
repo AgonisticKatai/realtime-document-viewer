@@ -1,5 +1,6 @@
-import type { DocumentFormData } from '../types';
 import styles from './DocumentForm.css?inline';
+
+import type { DocumentFormData } from '../types';
 
 export class DocumentForm extends HTMLElement {
   constructor() {

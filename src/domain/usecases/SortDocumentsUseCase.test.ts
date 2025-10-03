@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+
+import { SortDocumentsUseCase } from './SortDocumentsUseCase';
 import { Contributor } from '../models/Contributor';
 import { Document } from '../models/Document';
-import { SortDocumentsUseCase } from './SortDocumentsUseCase';
 
 describe('SortDocumentsUseCase', () => {
   let useCase: SortDocumentsUseCase;

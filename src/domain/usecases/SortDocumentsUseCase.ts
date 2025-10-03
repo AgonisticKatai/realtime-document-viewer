@@ -1,4 +1,5 @@
 import { Document } from '../models/Document';
+
 import type { SortBy } from '../types';
 
 export class SortDocumentsUseCase {

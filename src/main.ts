@@ -1,15 +1,18 @@
 import { Document } from './domain/models/Document';
-import type { SortBy } from './domain/types';
 import { CreateDocumentUseCase } from './domain/usecases/CreateDocumentUseCase';
 import { GetDocumentsUseCase } from './domain/usecases/GetDocumentsUseCase';
 import { SortDocumentsUseCase } from './domain/usecases/SortDocumentsUseCase';
 import { HttpDocumentRepository } from './infrastructure/http/HttpDocumentRepository';
-import './styles/main.css';
-import './ui/components/AddDocumentCard';
 import { DocumentCard } from './ui/components/DocumentCard';
+
+import type { SortBy } from './domain/types';
+import type { ViewMode } from './ui/types';
+
+import './styles/main.css';
+
+import './ui/components/AddDocumentCard';
 import './ui/components/DocumentForm';
 import './ui/components/SortControl';
-import type { ViewMode } from './ui/types';
 import './ui/components/ViewToggle';
 
 let allDocuments: Document[] = [];

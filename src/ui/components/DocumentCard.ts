@@ -1,6 +1,7 @@
-import { Document } from '../../domain/models/Document';
-import type { ViewMode } from '../types';
 import styles from './DocumentCard.css?inline';
+import { Document } from '../../domain/models/Document';
+
+import type { ViewMode } from '../types';
 
 export class DocumentCard extends HTMLElement {
   private _document: Document | null = null;

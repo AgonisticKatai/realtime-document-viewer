@@ -1,4 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { ViewToggle } from './ViewToggle';
 
 describe('ViewToggle', () => {

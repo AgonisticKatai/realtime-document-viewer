@@ -1,5 +1,6 @@
-import type { SortBy } from '../../domain/types';
 import styles from './SortControl.css?inline';
+
+import type { SortBy } from '../../domain/types';
 
 export class SortControl extends HTMLElement {
   constructor() {

@@ -1,7 +1,7 @@
-import { Document } from '../../domain/models/Document';
-import { DocumentRepository } from '../../domain/repositories/DocumentRepository';
 import { DocumentDTO } from './dtos/DocumentDTO';
 import { DocumentMapper } from './mappers/DocumentMapper';
+import { Document } from '../../domain/models/Document';
+import { DocumentRepository } from '../../domain/repositories/DocumentRepository';
 
 export class HttpDocumentRepository implements DocumentRepository {
   constructor(private readonly config: { baseUrl: string }) {}

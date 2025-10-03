@@ -1,6 +1,6 @@
-import { NotificationData, NotificationService } from '../../domain/services/NotificationService';
 import { NotificationDTO } from './dtos/NotificationDTO';
 import { NotificationMapper } from './mappers/NotificationMapper';
+import { NotificationData, NotificationService } from '../../domain/services/NotificationService';
 
 export class WebSocketNotificationService implements NotificationService {
   private websocket: WebSocket | null = null;
