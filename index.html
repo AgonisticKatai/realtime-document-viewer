@@ -2,27 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document Manager</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Real-time document management application with collaborative features" name="description">
+  <title>Document Manager - Real-time Collaboration</title>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
   <div id="app">
-    <header class="header">
+    <header class="header" role="banner">
       <h1>Document Manager</h1>
+      <p class="header-subtitle">Real-time collaborative document management</p>
     </header>
 
-    <main class="main">
-      <div class="controls">
+    <main class="main" id="main-content" role="main">
+      <section aria-label="Document controls" class="controls">
+        <h2 class="sr-only">Sort and view options</h2>
         <sort-control></sort-control>
         <view-toggle></view-toggle>
-      </div>
+      </section>
 
-      <div id="documentList" class="document-list"></div>
+      <section aria-labelledby="documents-heading" class="document-section">
+        <h2 class="sr-only" id="documents-heading">Documents list</h2>
+        <div aria-label="Documents" aria-live="polite" class="document-list" id="documentList" role="region"></div>
+      </section>
     </main>
 
-    <div id="notifications" class="notifications"></div>
+    <div aria-label="Notifications" aria-live="polite" class="notifications" id="notifications" role="region"></div>
   </div>
 
-  <script type="module" src="/src/main.ts"></script>
+  <script src="/src/main.ts" type="module"></script>
 </body>
 </html>
