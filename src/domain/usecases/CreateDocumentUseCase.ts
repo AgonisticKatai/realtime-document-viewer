@@ -1,7 +1,7 @@
 import { Contributor } from '../models/Contributor';
 import { Document } from '../models/Document';
 
-interface CreateDocumentInput {
+export interface CreateDocumentInput {
   attachments: string[];
   contributors: string[];
   name: string;
