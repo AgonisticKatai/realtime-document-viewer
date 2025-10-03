@@ -30,12 +30,14 @@ async function fetchDocuments() {
   const repository = new HttpDocumentRepository({ baseUrl: 'http://localhost:8080' });
   const getDocumentsUseCase = new GetDocumentsUseCase(repository);
 
-  try {
-    allDocuments = await getDocumentsUseCase.execute();
-    renderDocuments();
-  } catch (error) {
+  const [error, documents] = await getDocumentsUseCase.execute();
+  if (error) {
     console.error('Error loading documents:', error);
+    return;
   }
+
+  allDocuments = documents as Document[];
+  renderDocuments();
 }
 
 function renderDocuments({ sortBy }: { sortBy?: SortBy } = {}) {
