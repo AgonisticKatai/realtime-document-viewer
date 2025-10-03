@@ -36,6 +36,7 @@ The project follows a clean hexagonal architecture separating business logic fro
 - **Web Components** - Native browser APIs
 - **WebSocket** - Real-time notifications
 - **ESLint + Stylelint** - Code quality
+- **WCAG 2.1 AA Compliance** - Full accessibility support
 
 ## ✨ Features
 
@@ -50,6 +51,45 @@ The project follows a clean hexagonal architecture separating business logic fro
 - Custom Events for component communication
 - Separation of concerns (sorting as separate use case)
 - Proper DTO mapping from API to domain entities
+
+## ♿ Accessibility & Inclusive Design
+
+This application implements comprehensive accessibility features following **WCAG 2.1 AA** guidelines and modern web standards:
+
+### 🎹 **Keyboard Navigation**
+- **Full keyboard support** - Navigate entire app using Tab, Arrow keys, Enter, Escape
+- **Focus management** - Visible focus indicators with proper contrast
+- **Focus trapping** - Modal dialogs contain focus within boundaries
+- **Skip links** - Quick navigation to main content
+
+### 🖥️ **Screen Reader Support**
+- **Semantic HTML** - Proper use of `<article>`, `<section>`, `<header>`, heading hierarchy
+- **ARIA labels** - Descriptive labels for interactive elements
+- **Live regions** - Real-time announcements for dynamic content changes
+- **Screen reader utilities** - `.sr-only` class for additional context
+
+### 📱 **Responsive & Adaptive**
+- **Flexible layouts** - Works across different screen sizes and orientations
+- **Touch targets** - Minimum 44px click areas for mobile accessibility
+- **Zoom support** - Functional up to 200% zoom level
+
+### 🎨 **Visual Accessibility**
+- **High contrast support** - `prefers-contrast: more` media query
+- **Reduced motion** - Respects `prefers-reduced-motion` user preference
+- **Color independence** - Information not conveyed by color alone
+- **Scalable typography** - Relative units and clamp() for fluid scaling
+
+### 🔧 **Implementation Details**
+- **Web Components accessibility** - Proper ARIA in Shadow DOM contexts
+- **Form validation** - Real-time feedback with `aria-invalid` and `role="alert"`
+- **Toast notifications** - `role="alert"` and `aria-live="assertive"` for immediate announcements
+- **Component isolation** - Each component imports accessibility utilities as needed
+
+### ✅ **Standards Compliance**
+- **HTML validation** - Semantic, valid markup
+- **ARIA best practices** - Proper roles, states, and properties
+- **Keyboard patterns** - Following established interaction patterns
+- **Focus indicators** - 2px minimum outline with adequate contrast ratios
 
 ## 📋 Prerequisites
 
@@ -136,6 +176,14 @@ Demonstrates deep understanding of web standards and JavaScript fundamentals wit
 - 🛡️ True encapsulation with Shadow DOM
 - 📦 No build-time dependencies for components
 - ♻️ Reusable across any framework
+
+### ♿ Why Accessibility First?
+
+- 🌍 **Inclusive Design**: Creates a better experience for everyone
+- 📏 **WCAG 2.1 AA Compliance**: Professional standard for web applications  
+- ⌨️ **Keyboard Navigation**: Essential for power users and accessibility
+- 📱 **Screen Reader Support**: Semantic HTML with proper ARIA implementation
+- 🎯 **Quality Indicator**: Demonstrates attention to detail and professional standards
 
 ### ⚡ Why Client-Side Sorting?
 
