@@ -19,7 +19,7 @@ describe('GetDocumentsUseCase', () => {
           createdAt: new Date('2024-01-15'),
           id: '2',
           name: 'Zebra Document',
-          version: 3
+          version: '3.0.0'
         }),
         Document.create({
           attachments: [],
@@ -27,7 +27,7 @@ describe('GetDocumentsUseCase', () => {
           createdAt: new Date('2024-01-10'),
           id: '1',
           name: 'Alpha Document',
-          version: 1
+          version: '1.0.0'
         })
       ])
     };
