@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { DocumentService } from './DocumentService';
 
 import type { DocumentServiceConfig } from './types';
-import type { CreateDocumentInput } from '../domain/usecases/CreateDocumentUseCase';
+import type { CreateDocumentProps } from '../domain/types';
 
 describe('DocumentService', () => {
   let service: DocumentService;
@@ -26,7 +26,7 @@ describe('DocumentService', () => {
   });
 
   it('should create document and add to collection', () => {
-    const input: CreateDocumentInput = {
+    const input: CreateDocumentProps = {
       name: 'Test Document',
       contributors: ['John Doe'],
       attachments: ['file.pdf']
@@ -44,7 +44,7 @@ describe('DocumentService', () => {
   });
 
   it('should handle create document validation errors', () => {
-    const invalidInput: CreateDocumentInput = {
+    const invalidInput: CreateDocumentProps = {
       name: '',
       contributors: [],
       attachments: []
@@ -58,12 +58,12 @@ describe('DocumentService', () => {
   });
 
   it('should add new documents at the beginning of the collection', () => {
-    const input1: CreateDocumentInput = {
+    const input1: CreateDocumentProps = {
       name: 'First Document',
       contributors: ['John'],
       attachments: []
     };
-    const input2: CreateDocumentInput = {
+    const input2: CreateDocumentProps = {
       name: 'Second Document',
       contributors: ['Jane'],
       attachments: []
