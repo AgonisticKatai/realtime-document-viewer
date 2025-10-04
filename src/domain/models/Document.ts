@@ -1,13 +1,6 @@
 import { Contributor } from './Contributor';
 
-export interface DocumentProps {
-  attachments: string[];
-  contributors: Contributor[];
-  createdAt: Date;
-  id: string;
-  name: string;
-  version: string;
-}
+import type { DocumentProps } from '../types';
 
 export class Document {
   readonly attachments: string[];
