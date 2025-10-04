@@ -1,3 +1,4 @@
+import { INITIAL_DOCUMENT_VERSION } from '../constants';
 import { InlineError, error, success } from '../errors';
 import { Contributor } from '../models/Contributor';
 import { Document } from '../models/Document';
@@ -26,7 +27,7 @@ export class CreateDocumentUseCase {
       createdAt: new Date(),
       id: this.generateId(),
       name,
-      version: 1
+      version: INITIAL_DOCUMENT_VERSION
     });
 
     return success(document);
