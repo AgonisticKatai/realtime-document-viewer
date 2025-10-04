@@ -2,6 +2,25 @@
 
 A scalable document management application built with vanilla TypeScript, Web Components, and modern CSS. Features real-time WebSocket notifications, client-side sorting, and dual view modes.
 
+## 📋 Table of Contents
+
+- [🏗️ Architecture](#️-architecture)
+  - [🔷 Hexagonal Architecture + Service Layer](#-hexagonal-architecture--service-layer)
+  - [🔷 Hexagonal Architecture Layers](#-hexagonal-architecture-layers)
+  - [🏗️ Type Organization Strategy](#️-type-organization-strategy)
+  - [🎛️ Service Layer Architecture](#️-service-layer-architecture)
+- [🚨 Error Handling System](#-error-handling-system)
+  - [🚨 InlineError Pattern](#-inlineerror-pattern---functional-error-handling)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [✨ Features](#-features)
+- [♿ Accessibility & Inclusive Design](#-accessibility--inclusive-design)
+- [🎨 CSS Architecture & Design System](#-css-architecture--design-system)
+- [📋 Prerequisites](#-prerequisites)
+- [🚀 Setup](#-setup)
+- [💻 Development](#-development)
+- [🧪 Testing Strategy](#-testing-strategy)
+- [🤔 Project Decisions](#-project-decisions)
+
 ## 🏗️ Architecture
 
 ### 🔷 **Hexagonal Architecture + Service Layer**
