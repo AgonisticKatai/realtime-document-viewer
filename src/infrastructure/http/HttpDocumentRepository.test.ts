@@ -35,7 +35,7 @@ describe('HttpDocumentRepository', () => {
     expect(documents).toHaveLength(1);
     expect(documents?.[0].id).toBe('d1');
     expect(documents?.[0].name).toBe('Test Document');
-    expect(documents?.[0].version).toBe(1);
+    expect(documents?.[0].version).toBe('1.0.0');
     expect(fetch).toHaveBeenCalledWith('http://localhost:8080/documents');
   });
 
