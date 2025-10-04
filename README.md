@@ -143,39 +143,105 @@ src/
 - Handles notification display and lifecycle
 - Abstracts notification infrastructure
 
-### 🚨 **Error Handling System**
+## 🚨 Error Handling System
 
-The application uses a functional **InlineError pattern**:
+### 🚨 InlineError Pattern - Functional Error Handling
+
+The application uses a functional approach to error handling inspired by Go's error handling pattern. Instead of throwing exceptions, functions return a tuple `[error, data]`.
+
+#### 🔧 Core Type Definition
 
 ```typescript
-// Simple, elegant error handling
-export type InlineError<T> = [string | null, T | null];
-
-// Usage examples
-const [error, documents] = await documentService.fetchDocuments();
-if (error) {
-  console.error('Failed to load:', error);
-  return;
-}
-// Use documents safely
+type InlineError<T> = [string | null, T | null];
 ```
 
-**Benefits:**
-- ✅ **Explicit error handling** - Errors are part of the type system
-- ✅ **No exceptions** - Predictable control flow
-- ✅ **Simple & readable** - Easy to understand and use
-- ✅ **Composable** - Errors propagate naturally through the call stack
+This creates a tuple where:
+- **First element**: Error message (string) or null if success
+- **Second element**: Data of type T or null if error
 
-### 🔑 Key Architectural Decisions
+#### 🎯 Basic Usage
 
-- **Service-oriented design**: Clear separation between orchestration, business logic, and presentation
-- **Functional error handling**: InlineError pattern for explicit, composable error management
-- **No frameworks**: Vanilla TypeScript with Web Components for maximum control and learning
-- **TDD**: Test-driven development for domain and infrastructure layers
-- **Client-side sorting**: Single API call, all operations in memory for performance
-- **Immutable entities**: Domain models are readonly after creation
-- **Factory pattern**: Controlled entity creation with validation
-- **Design System**: Modern CSS architecture with centralized theme, tokens, and Web Component styling
+```typescript
+// For operations returning data
+const [error, documents] = await documentService.fetchDocuments();
+if (error) {
+  console.error('Failed to fetch documents:', error);
+  return; // Handle error gracefully
+}
+// Use documents safely - TypeScript knows it's Document[]
+
+// For void operations (no return data)
+const [error, success] = uiRenderer.renderDocuments(docs, callback);
+if (error) {
+  console.error('Render failed:', error);
+  return;
+}
+// success is true - operation completed successfully
+```
+
+#### 🛠️ Helper Functions
+
+```typescript
+// Success cases
+const success = <T>(data: T): InlineError<T> => [null, data];
+const successResult = success(['doc1', 'doc2']); // [null, string[]]
+const voidSuccess = success(true); // [null, true] for void operations
+
+// Error cases  
+const error = <T>(message: string): InlineError<T> => [message, null];
+const errorResult = error('Network connection failed'); // [string, null]
+```
+
+#### 🏗️ Real-world Examples
+
+```typescript
+// Repository layer
+class HttpDocumentRepository {
+  async getAll(): Promise<InlineError<Document[]>> {
+    try {
+      const response = await fetch('/api/documents');
+      if (!response.ok) {
+        return error('Failed to fetch documents');
+      }
+      const data = await response.json();
+      return success(data.documents);
+    } catch (err) {
+      return error('Connection error');
+    }
+  }
+}
+
+// Service layer  
+class DocumentService {
+  async fetchDocuments(): Promise<InlineError<Document[]>> {
+    const [err, documents] = await this.repository.getAll();
+    if (err) return error(err); // Propagate error
+    return success(documents);   // Propagate success
+  }
+}
+
+// Controller layer
+class AppController {
+  async init(): Promise<void> {
+    const [fetchError, documents] = await this.documentService.fetchDocuments();
+    if (fetchError) {
+      this.notificationManager.showNotification({ message: fetchError });
+      return;
+    }
+    // Both operations successful - continue initialization
+  }
+}
+```
+
+#### ✅ Advantages over try/catch
+
+- **Explicit**: Errors are part of the function signature
+- **Composable**: Errors propagate naturally through the call stack
+- **Type-safe**: TypeScript knows when you have handled the error case
+- **Predictable**: No hidden exceptions or silent failures
+- **Functional**: Encourages immutable error handling patterns
+
+
 
 ## 🛠️ Tech Stack
 
@@ -343,181 +409,40 @@ Coverage focuses on business logic and critical paths. UI components have basic 
 
 ## 🤔 Key Architectural Decisions
 
-### 🎯 Why Service-Oriented Architecture?
-
-**Service Layer Components:**
-- 📍 **AppController**: Orchestrates the entire application
-- 📄 **DocumentService**: Encapsulates all document logic  
-- 🎨 **UIRenderer**: Handles presentation concerns
-- 🔔 **NotificationManager**: Manages real-time communication
-
-**Benefits:**
-- ✅ **Single Responsibility**: Each service has one clear purpose
-- 🧪 **Testable**: Services can be tested independently
-- 🔄 **Maintainable**: Changes are localized to specific services
-- 📖 **Readable**: Clean, focused code that's easy to understand
-
-### 🚨 InlineError Pattern - Functional Error Handling
-
-The application uses a functional approach to error handling inspired by Go's error handling pattern. Instead of throwing exceptions, functions return a tuple `[error, data]`.
-
-#### 🔧 Core Type Definition
-
-```typescript
-type InlineError<T> = [string | null, T | null];
-```
-
-This creates a tuple where:
-- **First element**: Error message (string) or null if success
-- **Second element**: Data of type T or null if error
-
-#### 🎯 Basic Usage
-
-```typescript
-// For operations returning data
-const [error, documents] = await documentService.fetchDocuments();
-if (error) {
-  console.error('Failed to fetch documents:', error);
-  return; // Handle error gracefully
-}
-// Use documents safely - TypeScript knows it's Document[]
-
-// For void operations (no return data)
-const [error, success] = uiRenderer.renderDocuments(docs, callback);
-if (error) {
-  console.error('Render failed:', error);
-  return;
-}
-// success is true - operation completed successfully
-```
-
-#### 🛠️ Helper Functions
-
-```typescript
-// Success cases
-const success = <T>(data: T): InlineError<T> => [null, data];
-const successResult = success(['doc1', 'doc2']); // [null, string[]]
-const voidSuccess = success(true); // [null, true] for void operations
-
-// Error cases  
-const error = <T>(message: string): InlineError<T> => [message, null];
-const errorResult = error('Network connection failed'); // [string, null]
-```
-
-#### 🏗️ Real-world Examples
-
-```typescript
-// Repository layer
-class HttpDocumentRepository {
-  async getAll(): Promise<InlineError<Document[]>> {
-    try {
-      const response = await fetch('/api/documents');
-      if (!response.ok) {
-        return error('Failed to fetch documents');
-      }
-      const data = await response.json();
-      return success(data.documents);
-    } catch (err) {
-      return error('Connection error');
-    }
-  }
-}
-
-// Service layer  
-class DocumentService {
-  async fetchDocuments(): Promise<InlineError<Document[]>> {
-    const [err, documents] = await this.repository.getAll();
-    if (err) return error(err); // Propagate error
-    return success(documents);   // Propagate success
-  }
-  
-  renderUI(): InlineError<boolean> {
-    const container = document.getElementById('documentList');
-    if (!container) {
-      return error('Document list container not found in DOM');
-    }
-    // Render logic...
-    return success(true); // Operation completed successfully
-  }
-}
-
-// Controller layer
-class AppController {
-  async init(): Promise<void> {
-    const [fetchError, documents] = await this.documentService.fetchDocuments();
-    if (fetchError) {
-      this.notificationManager.showNotification({ message: fetchError });
-      return;
-    }
-
-    const [renderError] = this.uiRenderer.renderDocuments(documents, callback);
-    if (renderError) {
-      console.error('UI render failed:', renderError);
-      return;
-    }
-    
-    // Both operations successful - continue initialization
-  }
-}
-```
-
-#### ✅ Advantages over try/catch
-
-- **Explicit**: Errors are part of the function signature
-- **Composable**: Errors propagate naturally through the call stack
-- **Type-safe**: TypeScript knows when you have handled the error case
-- **Predictable**: No hidden exceptions or silent failures
-- **Functional**: Encourages immutable error handling patterns
-
-### 🎯 Why Vanilla TypeScript?
-
-Demonstrates deep understanding of web standards and JavaScript fundamentals without framework abstraction.
-
 ### 🔷 Why Hexagonal Architecture + Service Layer?
 
-**Hexagonal Architecture (Ports & Adapters):**
-- ✅ **Clean separation of concerns** - Business logic isolated from infrastructure
-- 🧪 **Testable business logic** - Domain can be tested without external dependencies
-- 🔄 **Easy to swap implementations** - HTTP can be replaced with GraphQL, etc.
-- 🌐 **Framework-agnostic domain** - Business rules independent of UI framework
+**Hexagonal separates business logic from infrastructure**, while **Service Layer provides application orchestration**:
 
-**+ Service Layer Benefits:**
-- 🎯 **Facade Pattern**: Services simplify complex domain interactions
-- 🎛️ **Orchestration**: AppController coordinates without business logic
-- 📄 **Application State**: DocumentService manages cross-cutting concerns
-- 🎨 **Presentation Logic**: UIRenderer handles view-specific operations
+- ✅ **Clean separation** - Domain isolated from UI/HTTP/WebSocket concerns
+- 🧪 **Testable** - Business logic tested without external dependencies  
+- 🔄 **Swappable** - Easy to replace HTTP with GraphQL, etc.
+- � **Single responsibility** - Services handle one concern each
+
+### 🚨 Why InlineError Pattern?
+
+**Functional error handling instead of exceptions**:
+
+- ✅ **Explicit** - Errors are part of the function signature
+- � **Predictable** - No hidden exceptions or silent failures
+- � **Composable** - Errors propagate naturally through the call stack
+- 📖 **Simple** - Easy to read: `const [error, data] = await operation()`
 
 ### 🧩 Why Web Components?
 
-- 🌐 Native browser standard
-- 🛡️ True encapsulation with Shadow DOM
-- 📦 No build-time dependencies for components
-- ♻️ Reusable across any framework
-
-### ♿ Why Accessibility First?
-
-- 🌍 **Inclusive Design**: Creates a better experience for everyone
-- 📏 **WCAG 2.1 AA Compliance**: Professional standard for web applications  
-- ⌨️ **Keyboard Navigation**: Essential for power users and accessibility
-- 📱 **Screen Reader Support**: Semantic HTML with proper ARIA implementation
-- 🎯 **Quality Indicator**: Demonstrates attention to detail and professional standards
+- 🌐 **Native standard** - No framework dependencies
+- 🛡️ **True encapsulation** - Shadow DOM isolates styles and behavior
+- ♻️ **Reusable** - Works with any framework or none at all
 
 ### ⚡ Why Client-Side Sorting?
 
-The server API returns documents in random order on each request. Client-side sorting provides:
-- 🚫 **Eliminates unnecessary HTTP calls** - No server round-trips for sorting
-- 📊 **Maintains data consistency** - User's sort preference preserved across interactions
-- 🏃‍♂️ **Improves performance** - Instant sorting without network latency
-- 😊 **Better UX** - Immediate visual feedback and responsive interface
+Server returns random order on each request. Client-side provides:
+- 🚫 **No extra HTTP calls** - Sort in memory after single fetch
+- 📊 **Consistent state** - User's sort preference maintained
+- ⚡ **Instant response** - No network latency for sorting
 
-### 🎯 Why Separate Use Cases?
+### 🎯 Why Vanilla TypeScript?
 
-Following Single Responsibility Principle:
-- **GetDocumentsUseCase** - Fetch from API with error handling
-- **SortDocumentsUseCase** - Sort in memory with validation
-- **CreateDocumentUseCase** - Create new documents with validation
-
-Each use case is testable, reusable, and maintainable.
+Demonstrates **deep understanding of web standards** without framework abstraction - perfect for showcasing fundamental skills.
 
 ## 🌐 Browser Support
 
