@@ -1,9 +1,21 @@
 import { Contributor } from '../../../domain/models/Contributor';
 import { Document } from '../../../domain/models/Document';
-import { DocumentDTO } from '../dtos/DocumentDTO';
+import { DocumentDTO, ContributorDTO } from '../dtos/DocumentDTO';
+
+interface MapDocumentParams {
+  dto: DocumentDTO;
+}
+
+interface MapContributorsParams {
+  contributors: ContributorDTO[];
+}
+
+interface ExtractVersionParams {
+  versionString: string;
+}
 
 export class DocumentMapper {
-  static toDomain({ dto }: { dto: DocumentDTO }): Document {
+  static toDomain({ dto }: MapDocumentParams): Document {
     const contributors = this.mapContributors({ contributors: dto.Contributors });
     const version = this.extractMajorVersion({ versionString: dto.Version });
 
@@ -17,7 +29,7 @@ export class DocumentMapper {
     });
   }
 
-  private static mapContributors({ contributors }: { contributors: Array<{ ID: string; Name: string }> }): Contributor[] {
+  private static mapContributors({ contributors }: MapContributorsParams): Contributor[] {
     return contributors.map(contributorDto =>
       Contributor.create({
         id: contributorDto.ID,
@@ -26,9 +38,15 @@ export class DocumentMapper {
     );
   }
 
-  private static extractMajorVersion({ versionString }: { versionString: string }): number {
+  private static extractMajorVersion({ versionString }: ExtractVersionParams): number {
     const versionParts = versionString.split('.');
     const [majorVersionString] = versionParts;
-    return Number(majorVersionString);
+    const majorVersion = Number(majorVersionString);
+
+    if (isNaN(majorVersion) || majorVersion < 0) {
+      throw new Error(`Invalid version string: ${versionString}`);
+    }
+
+    return majorVersion;
   }
 }

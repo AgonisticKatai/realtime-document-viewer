@@ -1,9 +1,6 @@
 import styles from './NotificationToast.css?inline';
 
-interface ToastData {
-  documentTitle: string;
-  userName: string;
-}
+import type { ToastData } from '../types';
 
 export class NotificationToast extends HTMLElement {
   private hideTimeout: number | null = null;

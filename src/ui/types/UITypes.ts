@@ -10,3 +10,8 @@ export interface DocumentFormElement extends HTMLElement {
   show(): void;
   close(): void;
 }
+
+export interface ToastData {
+  documentTitle: string;
+  userName: string;
+}

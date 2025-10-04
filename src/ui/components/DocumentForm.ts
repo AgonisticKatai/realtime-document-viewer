@@ -127,18 +127,19 @@ export class DocumentForm extends HTMLElement {
   }
 
   private attachEventListeners(): void {
-    const dialog = this.shadowRoot?.querySelector('dialog');
-    const formElement = this.shadowRoot?.querySelector('form');
+    const dialog = this.shadowRoot?.querySelector('dialog') as HTMLDialogElement | null;
+    const formElement = this.shadowRoot?.querySelector('form') as HTMLFormElement | null;
     const closeButtons = this.shadowRoot?.querySelectorAll('.close-button, .close-btn');
-    const nameInput = this.shadowRoot?.querySelector('#documentName') as HTMLInputElement;
+    const nameInput = this.shadowRoot?.querySelector('#documentName') as HTMLInputElement | null;
 
-    formElement?.addEventListener('submit', (event) => {
+    formElement?.addEventListener('submit', (event: SubmitEvent) => {
       event.preventDefault();
       this.handleSubmit();
     });
 
     closeButtons?.forEach(button => {
-      button.addEventListener('click', (event) => {
+      const buttonElement = button as HTMLButtonElement;
+      buttonElement.addEventListener('click', (event: MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
 

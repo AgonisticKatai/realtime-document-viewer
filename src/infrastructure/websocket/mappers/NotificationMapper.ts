@@ -1,12 +1,22 @@
 import { NotificationData } from '../../../domain/services/NotificationService';
 import { NotificationDTO } from '../dtos/NotificationDTO';
 
+interface MapNotificationParams {
+  dto: NotificationDTO;
+}
+
 export class NotificationMapper {
-  static toDomain({ dto }: { dto: NotificationDTO }): NotificationData {
+  static toDomain({ dto }: MapNotificationParams): NotificationData {
+    const timestamp = new Date(dto.Timestamp);
+
+    if (isNaN(timestamp.getTime())) {
+      throw new Error(`Invalid timestamp: ${dto.Timestamp}`);
+    }
+
     return {
       documentId: dto.DocumentID,
       documentTitle: dto.DocumentTitle,
-      timestamp: new Date(dto.Timestamp),
+      timestamp,
       userId: dto.UserID,
       userName: dto.UserName
     };

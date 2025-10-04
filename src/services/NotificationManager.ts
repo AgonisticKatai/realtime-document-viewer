@@ -1,18 +1,22 @@
 import { WebSocketNotificationService } from '../infrastructure/websocket/WebSocketNotificationService';
 import { NotificationToast } from '../ui/components/NotificationToast';
 
+import type { NotificationManagerConfig } from './types';
+import type { WebSocketConfig } from '../infrastructure/websocket/types';
+
 export interface NotificationData {
   documentTitle: string;
   userName: string;
 }
 
 export class NotificationManager {
-  private notificationService: WebSocketNotificationService;
+  private readonly notificationService: WebSocketNotificationService;
 
-  constructor() {
-    this.notificationService = new WebSocketNotificationService({
-      url: 'ws://localhost:8080/notifications'
-    });
+  constructor(config: NotificationManagerConfig = { websocketUrl: 'ws://localhost:8080/notifications' }) {
+    const wsConfig: WebSocketConfig = {
+      url: config.websocketUrl
+    };
+    this.notificationService = new WebSocketNotificationService(wsConfig);
   }
 
   connect(): void {

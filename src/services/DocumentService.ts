@@ -5,17 +5,20 @@ import { GetDocumentsUseCase } from '../domain/usecases/GetDocumentsUseCase';
 import { SortDocumentsUseCase } from '../domain/usecases/SortDocumentsUseCase';
 import { HttpDocumentRepository } from '../infrastructure/http/HttpDocumentRepository';
 
+import type { DocumentServiceConfig } from './types';
 import type { SortBy } from '../domain/types';
+import type { HttpRepositoryConfig } from '../infrastructure/http/types';
 
 export class DocumentService {
   private allDocuments: Document[] = [];
-  private repository: HttpDocumentRepository;
-  private getDocumentsUseCase: GetDocumentsUseCase;
-  private sortDocumentsUseCase: SortDocumentsUseCase;
-  private createDocumentUseCase: CreateDocumentUseCase;
+  private readonly repository: HttpDocumentRepository;
+  private readonly getDocumentsUseCase: GetDocumentsUseCase;
+  private readonly sortDocumentsUseCase: SortDocumentsUseCase;
+  private readonly createDocumentUseCase: CreateDocumentUseCase;
 
-  constructor() {
-    this.repository = new HttpDocumentRepository({ baseUrl: 'http://localhost:8080' });
+  constructor(config: DocumentServiceConfig = { apiBaseUrl: 'http://localhost:8080' }) {
+    const repositoryConfig: HttpRepositoryConfig = { baseUrl: config.apiBaseUrl };
+    this.repository = new HttpDocumentRepository(repositoryConfig);
     this.getDocumentsUseCase = new GetDocumentsUseCase(this.repository);
     this.sortDocumentsUseCase = new SortDocumentsUseCase();
     this.createDocumentUseCase = new CreateDocumentUseCase();

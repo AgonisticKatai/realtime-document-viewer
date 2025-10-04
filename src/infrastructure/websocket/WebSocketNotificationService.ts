@@ -2,11 +2,13 @@ import { NotificationDTO } from './dtos/NotificationDTO';
 import { NotificationMapper } from './mappers/NotificationMapper';
 import { NotificationData, NotificationService } from '../../domain/services/NotificationService';
 
+import type { WebSocketConfig } from './types';
+
 export class WebSocketNotificationService implements NotificationService {
   private websocket: WebSocket | null = null;
   private callbacks: Array<(notification: NotificationData) => void> = [];
 
-  constructor(private readonly config: { url: string }) {}
+  constructor(private readonly config: WebSocketConfig) {}
 
   connect(): void {
     this.websocket = new WebSocket(this.config.url);
@@ -37,12 +39,34 @@ export class WebSocketNotificationService implements NotificationService {
 
   private handleMessage({ data }: { data: string }): void {
     try {
-      const dto: NotificationDTO = JSON.parse(data);
+      const parsed: unknown = JSON.parse(data);
+
+      if (!this.isValidNotificationDTO(parsed)) {
+        throw new Error('Invalid notification format');
+      }
+
+      const dto = parsed as NotificationDTO;
       const notification = NotificationMapper.toDomain({ dto });
 
       this.callbacks.forEach(callback => callback(notification));
     } catch (error) {
       console.error('Error parsing notification:', error);
     }
+  }
+
+  private isValidNotificationDTO(data: unknown): data is NotificationDTO {
+    if (typeof data !== 'object' || data === null) {
+      return false;
+    }
+
+    const obj = data as Record<string, unknown>;
+
+    return (
+      typeof obj.DocumentID === 'string' &&
+      typeof obj.DocumentTitle === 'string' &&
+      typeof obj.Timestamp === 'string' &&
+      typeof obj.UserID === 'string' &&
+      typeof obj.UserName === 'string'
+    );
   }
 }

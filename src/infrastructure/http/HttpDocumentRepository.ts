@@ -4,8 +4,10 @@ import { InlineError, error, success } from '../../domain/errors';
 import { Document } from '../../domain/models/Document';
 import { DocumentRepository } from '../../domain/repositories/DocumentRepository';
 
+import type { HttpRepositoryConfig } from './types';
+
 export class HttpDocumentRepository implements DocumentRepository {
-  constructor(private readonly config: { baseUrl: string }) {}
+  constructor(private readonly config: HttpRepositoryConfig) {}
 
   async getAll(): Promise<InlineError<Document[]>> {
     try {
