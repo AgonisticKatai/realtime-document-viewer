@@ -10,40 +10,97 @@ The application combines **Hexagonal Architecture** (Ports & Adapters) with a **
 
 ```
 src/
-├── main.ts                    # 📍 Application entry point (10 lines)
+├── main.ts                    # 📍 Application entry point
 ├── services/                  # 🎛️ Application Services Layer
 │   ├── AppController.ts       # 🎯 Main application orchestrator
 │   ├── DocumentService.ts     # 📄 Document business logic facade
 │   ├── UIRenderer.ts          # 🎨 UI rendering service
-│   └── NotificationManager.ts # 🔔 Notification handling
+│   ├── NotificationManager.ts # 🔔 Notification handling
+│   └── types/                # 📋 Service configuration types
+│       ├── ServiceTypes.ts   # 🎛️ Service interfaces & configs
+│       └── DomainTypes.ts    # 🔗 Domain-related service types
 ├── domain/                    # 🔷 HEXAGON CORE - Business Logic
-│   ├── models/               # 📝 Entities: Document, Contributor
+│   ├── models/               # 📝 Business entities
 │   ├── repositories/         # 🔌 Repository interfaces (PRIMARY PORTS)
 │   ├── usecases/            # ⚡ Business use cases
-│   ├── errors/              # 🚨 Error handling system
-│   └── types/               # 📋 Domain types
+│   ├── services/            # 🔌 Domain service interfaces
+│   ├── errors/              # 🚨 InlineError functional pattern
+│   └── types/               # 📋 Domain types & enums
 ├── infrastructure/           # 🔧 SECONDARY ADAPTERS
 │   ├── http/                # 🌐 HTTP API adapter
+│   │   ├── HttpDocumentRepository.ts # 🌐 Repository implementation
+│   │   ├── dtos/            # 📦 HTTP Data Transfer Objects
+│   │   ├── mappers/         # 🔄 DTO ↔ Domain conversion
+│   │   │   └── types/       # 📋 Mapper-specific interfaces
+│   │   └── types/           # 📋 HTTP configuration types
 │   └── websocket/           # ⚡ WebSocket adapter
-└── ui/                      # 🎨 PRIMARY ADAPTERS
-    └── components/          # 🧩 Web Components (UI adapters)
+│       ├── WebSocketNotificationService.ts # ⚡ Notification implementation
+│       ├── dtos/            # 📦 WebSocket DTOs
+│       ├── mappers/         # 🔄 DTO ↔ Domain conversion
+│       │   └── types/       # 📋 Mapper-specific interfaces
+│       └── types/           # 📋 WebSocket configuration types
+├── ui/                      # 🎨 PRIMARY ADAPTERS (Web Components)
+│   ├── components/          # 🧩 Web Components (*.ts + *.css + *.test.ts)
+│   └── types/               # 📋 UI component interfaces
+└── styles/                  # 🎨 Global styles & design system
+    ├── main.css             # 🌐 Global styles
+    ├── component-theme.css  # 🧩 Web Components base theme
+    └── tokens/              # 🎨 Design system tokens
 ```
 
 ### 🔷 **Hexagonal Architecture Layers**
 
 #### 🎯 **Core Domain (Hexagon Center)**
 - **Models**: Pure business entities (Document, Contributor)
-- **Use Cases**: Business logic operations
+- **Use Cases**: Business logic operations (Create, Get, Sort)
 - **Repository Interfaces**: Ports for data access
-- **Types & Errors**: Domain definitions
+- **Service Interfaces**: Domain service contracts (NotificationService)
+- **Types & Errors**: Domain definitions and functional error handling
 
-#### 🔌 **Primary Ports & Adapters** 
-- **Ports**: Repository interfaces, Service interfaces
-- **Adapters**: Web Components, Service Layer
+#### 🎛️ **Service Layer (Application Orchestration)**
+- **Controllers**: Application orchestration (AppController)
+- **Services**: Business facades (DocumentService, UIRenderer, NotificationManager)
+- **Types**: Service configuration interfaces organized by responsibility
 
-#### 🔧 **Secondary Ports & Adapters**
-- **Ports**: Repository interfaces (implemented by infrastructure)
+#### 🔌 **Primary Ports & Adapters (Driving Side)** 
+- **Ports**: Service interfaces, Repository interfaces
+- **Adapters**: Web Components (UI), Service Layer (Application logic)
+
+#### 🔧 **Secondary Ports & Adapters (Driven Side)**
+- **Ports**: Repository interfaces, Domain service interfaces
 - **Adapters**: HttpDocumentRepository, WebSocketNotificationService
+- **Infrastructure Types**: Configuration interfaces organized by adapter type
+
+### 🏗️ **Type Organization Strategy**
+
+#### 📋 **Types Organized by Architectural Responsibility**
+
+```
+📁 Domain Types (src/domain/types/)
+├── SortTypes.ts              # Business logic enums
+└── index.ts                  # Domain type exports
+
+📁 Service Types (src/services/types/)
+├── ServiceTypes.ts           # Service configuration interfaces
+├── DomainTypes.ts           # Domain-related service types
+└── index.ts                  # Service type exports
+
+📁 Infrastructure Types (src/infrastructure/*/types/)
+├── http/types/HttpTypes.ts   # HTTP adapter configuration
+├── websocket/types/WebSocketTypes.ts # WebSocket adapter configuration
+└── */mappers/types/MapperTypes.ts # Mapper-specific interfaces
+
+📁 UI Types (src/ui/types/)
+├── UITypes.ts               # UI component interfaces
+└── index.ts                 # UI type exports
+```
+
+#### ✅ **Benefits of This Organization**
+- **🎯 Single Responsibility**: Each type file has one clear purpose
+- **🔍 Easy Discovery**: Types are where you expect them architecturally
+- **📦 Clean Imports**: Barrel exports provide semantic import paths
+- **🔒 Encapsulation**: Infrastructure types stay in infrastructure layer
+- **🧪 Testable**: Type definitions are isolated and mockable
 
 ### 🎛️ **Service Layer Architecture**
 
