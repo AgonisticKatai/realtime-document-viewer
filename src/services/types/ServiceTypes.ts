@@ -9,3 +9,5 @@ export interface NotificationManagerConfig {
 export interface UIRendererConfig {
   readonly defaultViewMode?: 'list' | 'grid';
 }
+
+export type { NotificationDisplayData } from './DomainTypes';

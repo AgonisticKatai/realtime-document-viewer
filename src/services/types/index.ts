@@ -1,5 +1,6 @@
 export type {
   DocumentServiceConfig,
   NotificationManagerConfig,
-  UIRendererConfig
+  UIRendererConfig,
+  NotificationDisplayData
 } from './ServiceTypes';

@@ -1,18 +1,11 @@
 import { Contributor } from '../../../domain/models/Contributor';
 import { Document } from '../../../domain/models/Document';
-import { DocumentDTO, ContributorDTO } from '../dtos/DocumentDTO';
 
-interface MapDocumentParams {
-  dto: DocumentDTO;
-}
-
-interface MapContributorsParams {
-  contributors: ContributorDTO[];
-}
-
-interface ExtractVersionParams {
-  versionString: string;
-}
+import type {
+  MapDocumentParams,
+  MapContributorsParams,
+  ExtractVersionParams
+} from './types';
 
 export class DocumentMapper {
   static toDomain({ dto }: MapDocumentParams): Document {

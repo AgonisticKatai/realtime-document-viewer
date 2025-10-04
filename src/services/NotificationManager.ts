@@ -1,13 +1,8 @@
 import { WebSocketNotificationService } from '../infrastructure/websocket/WebSocketNotificationService';
 import { NotificationToast } from '../ui/components/NotificationToast';
 
-import type { NotificationManagerConfig } from './types';
+import type { NotificationManagerConfig, NotificationDisplayData } from './types';
 import type { WebSocketConfig } from '../infrastructure/websocket/types';
-
-export interface NotificationData {
-  documentTitle: string;
-  userName: string;
-}
 
 export class NotificationManager {
   private readonly notificationService: WebSocketNotificationService;
@@ -23,16 +18,17 @@ export class NotificationManager {
     this.notificationService.connect();
   }
 
-  onNotification(callback: (data: NotificationData) => void): void {
+  onNotification(callback: (data: NotificationDisplayData) => void): void {
     this.notificationService.onNotification((notification) => {
-      callback({
+      const displayData: NotificationDisplayData = {
         documentTitle: notification.documentTitle,
         userName: notification.userName
-      });
+      };
+      callback(displayData);
     });
   }
 
-  showNotification({ documentTitle, userName }: NotificationData): void {
+  showNotification({ documentTitle, userName }: NotificationDisplayData): void {
     const container = document.getElementById('notifications');
     if (!container) {
       return;

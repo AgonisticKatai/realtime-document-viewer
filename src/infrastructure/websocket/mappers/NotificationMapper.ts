@@ -1,9 +1,6 @@
 import { NotificationData } from '../../../domain/services/NotificationService';
-import { NotificationDTO } from '../dtos/NotificationDTO';
 
-interface MapNotificationParams {
-  dto: NotificationDTO;
-}
+import type { MapNotificationParams } from './types';
 
 export class NotificationMapper {
   static toDomain({ dto }: MapNotificationParams): NotificationData {
