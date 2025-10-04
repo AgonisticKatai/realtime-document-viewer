@@ -45,7 +45,10 @@ export class AppController {
       documents = sortedDocs as Document[];
     }
 
-    this.uiRenderer.renderDocuments(documents, () => this.showCreateDocumentForm());
+    const [error] = this.uiRenderer.renderDocuments(documents, () => this.showCreateDocumentForm());
+    if (error) {
+      console.error('Error rendering documents:', error);
+    }
   }
 
   private showCreateDocumentForm(): void {
@@ -79,10 +82,16 @@ export class AppController {
 
   private setupNotifications(): void {
     this.notificationManager.onNotification((data) => {
-      this.notificationManager.showNotification(data);
+      const [error] = this.notificationManager.showNotification(data);
+      if (error) {
+        console.error('Error showing notification:', error);
+      }
     });
 
-    this.notificationManager.connect();
+    const [error] = this.notificationManager.connect();
+    if (error) {
+      console.error('Error connecting to notifications:', error);
+    }
   }
 
   private setupEventListeners(): void {
