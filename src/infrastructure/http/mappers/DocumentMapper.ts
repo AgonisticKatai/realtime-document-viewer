@@ -3,14 +3,12 @@ import { Document } from '../../../domain/models/Document';
 
 import type {
   MapDocumentParams,
-  MapContributorsParams,
-  ExtractVersionParams
+  MapContributorsParams
 } from './types';
 
 export class DocumentMapper {
   static toDomain({ dto }: MapDocumentParams): Document {
     const contributors = this.mapContributors({ contributors: dto.Contributors });
-    const version = this.extractMajorVersion({ versionString: dto.Version });
 
     return Document.create({
       attachments: dto.Attachments,
@@ -18,7 +16,7 @@ export class DocumentMapper {
       createdAt: new Date(dto.CreatedAt),
       id: dto.ID,
       name: dto.Title,
-      version
+      version: dto.Version
     });
   }
 
@@ -29,17 +27,5 @@ export class DocumentMapper {
         name: contributorDto.Name
       })
     );
-  }
-
-  private static extractMajorVersion({ versionString }: ExtractVersionParams): number {
-    const versionParts = versionString.split('.');
-    const [majorVersionString] = versionParts;
-    const majorVersion = Number(majorVersionString);
-
-    if (isNaN(majorVersion) || majorVersion < 0) {
-      throw new Error(`Invalid version string: ${versionString}`);
-    }
-
-    return majorVersion;
   }
 }
