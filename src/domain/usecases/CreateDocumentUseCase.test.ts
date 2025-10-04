@@ -24,7 +24,7 @@ describe('CreateDocumentUseCase', () => {
     expect(document?.contributors).toHaveLength(2);
     expect(document?.contributors[0].name).toBe('John Doe');
     expect(document?.contributors[1].name).toBe('Jane Smith');
-    expect(document?.version).toBe(1);
+    expect(document?.version).toBe('1.0.0');
     expect(document?.id).toBeDefined();
   });
 
