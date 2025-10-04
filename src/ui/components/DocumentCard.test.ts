@@ -67,4 +67,23 @@ describe('DocumentCard', () => {
     expect(contributorList?.textContent).toContain('John Doe');
     expect(contributorList?.textContent).toContain('Jane Smith');
   });
+
+  it('should display relative time format', () => {
+    const recentDocument = Document.create({
+      attachments: [],
+      contributors: [Contributor.create({ id: 'c1', name: 'Test User' })],
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+      id: 'd2',
+      name: 'Recent Document',
+      version: 1
+    });
+
+    card.document = recentDocument;
+
+    const { shadowRoot } = card;
+    expect(shadowRoot).not.toBeNull();
+
+    const cardDate = shadowRoot?.querySelector('.card-date');
+    expect(cardDate?.textContent).toMatch(/ago|yesterday|days? ago/);
+  });
 });
