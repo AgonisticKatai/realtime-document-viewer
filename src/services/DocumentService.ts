@@ -6,8 +6,7 @@ import { SortDocumentsUseCase } from '../domain/usecases/SortDocumentsUseCase';
 import { HttpDocumentRepository } from '../infrastructure/http/HttpDocumentRepository';
 
 import type { DocumentServiceConfig } from './types';
-import type { SortBy } from '../domain/types';
-import type { CreateDocumentInput } from '../domain/usecases/CreateDocumentUseCase';
+import type { SortBy, CreateDocumentProps } from '../domain/types';
 import type { HttpRepositoryConfig } from '../infrastructure/http/types';
 
 export class DocumentService {
@@ -39,7 +38,7 @@ export class DocumentService {
     return this.sortDocumentsUseCase.execute({ documents: this.allDocuments, sortBy });
   }
 
-  createDocument(input: CreateDocumentInput): InlineError<Document> {
+  createDocument(input: CreateDocumentProps): InlineError<Document> {
     const [error, newDocument] = this.createDocumentUseCase.execute(input);
     if (error) {
       return [error, null];
