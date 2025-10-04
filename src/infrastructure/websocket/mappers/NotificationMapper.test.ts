@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 
 import { NotificationMapper } from './NotificationMapper';
-import { NotificationDTO } from '../dtos/NotificationDTO';
+
+import type { NotificationDTO } from '../dtos/NotificationDTO';
 
 describe('NotificationMapper', () => {
   it('should map DTO to Domain entity', () => {
