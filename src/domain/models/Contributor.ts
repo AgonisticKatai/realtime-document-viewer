@@ -1,7 +1,4 @@
-export interface ContributorProps {
-  id: string;
-  name: string;
-}
+import type { ContributorProps } from '../types';
 
 export class Contributor {
   readonly id: string;
