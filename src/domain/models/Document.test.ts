@@ -17,7 +17,7 @@ describe('Document', () => {
       createdAt: now,
       id: '123',
       name: 'Project Proposal',
-      version: 1
+      version: '1.0.0'
     });
 
     expect(document.attachments).toEqual([]);
@@ -27,7 +27,7 @@ describe('Document', () => {
     expect(document.createdAt).toBe(now);
     expect(document.id).toBe('123');
     expect(document.name).toBe('Project Proposal');
-    expect(document.version).toBe(1);
+    expect(document.version).toBe('1.0.0');
   });
 
   it('should throw error when name is empty', () => {
@@ -38,12 +38,12 @@ describe('Document', () => {
         createdAt: new Date(),
         id: '123',
         name: '',
-        version: 1
+        version: '1.0.0'
       });
     }).toThrow('Document name cannot be empty');
   });
 
-  it('should throw error when version is less than 1', () => {
+  it('should throw error when version format is invalid', () => {
     expect(() => {
       Document.create({
         attachments: [],
@@ -51,8 +51,8 @@ describe('Document', () => {
         createdAt: new Date(),
         id: '123',
         name: 'Test',
-        version: 0
+        version: '1.0'
       });
-    }).toThrow('Document version must be at least 1');
+    }).toThrow('Document version must follow semantic versioning format (x.y.z)');
   });
 });
