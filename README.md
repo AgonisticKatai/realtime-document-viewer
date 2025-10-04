@@ -281,20 +281,117 @@ Coverage focuses on business logic and critical paths. UI components have basic 
 - 🔄 **Maintainable**: Changes are localized to specific services
 - 📖 **Readable**: Clean, focused code that's easy to understand
 
-### 🚨 Why InlineError Pattern?
+### 🚨 InlineError Pattern - Functional Error Handling
 
-**Simple functional error handling:**
+The application uses a functional approach to error handling inspired by Go's error handling pattern. Instead of throwing exceptions, functions return a tuple `[error, data]`.
+
+#### 🔧 Core Type Definition
+
 ```typescript
-const [error, data] = await service.operation();
-if (error) { /* handle error */ }
-// Use data safely
+type InlineError<T> = [string | null, T | null];
 ```
 
-**Instead of try/catch:**
-- ✅ **Explicit**: Errors are part of the type system
-- 🎯 **Predictable**: No hidden exceptions
-- 🔄 **Composable**: Errors propagate naturally
-- 📖 **Simple**: Easy to read and understand
+This creates a tuple where:
+- **First element**: Error message (string) or null if success
+- **Second element**: Data of type T or null if error
+
+#### 🎯 Basic Usage
+
+```typescript
+// For operations returning data
+const [error, documents] = await documentService.fetchDocuments();
+if (error) {
+  console.error('Failed to fetch documents:', error);
+  return; // Handle error gracefully
+}
+// Use documents safely - TypeScript knows it's Document[]
+
+// For void operations (no return data)
+const [error, success] = uiRenderer.renderDocuments(docs, callback);
+if (error) {
+  console.error('Render failed:', error);
+  return;
+}
+// success is true - operation completed successfully
+```
+
+#### 🛠️ Helper Functions
+
+```typescript
+// Success cases
+const success = <T>(data: T): InlineError<T> => [null, data];
+const successResult = success(['doc1', 'doc2']); // [null, string[]]
+const voidSuccess = success(true); // [null, true] for void operations
+
+// Error cases  
+const error = <T>(message: string): InlineError<T> => [message, null];
+const errorResult = error('Network connection failed'); // [string, null]
+```
+
+#### 🏗️ Real-world Examples
+
+```typescript
+// Repository layer
+class HttpDocumentRepository {
+  async getAll(): Promise<InlineError<Document[]>> {
+    try {
+      const response = await fetch('/api/documents');
+      if (!response.ok) {
+        return error('Failed to fetch documents');
+      }
+      const data = await response.json();
+      return success(data.documents);
+    } catch (err) {
+      return error('Connection error');
+    }
+  }
+}
+
+// Service layer  
+class DocumentService {
+  async fetchDocuments(): Promise<InlineError<Document[]>> {
+    const [err, documents] = await this.repository.getAll();
+    if (err) return error(err); // Propagate error
+    return success(documents);   // Propagate success
+  }
+  
+  renderUI(): InlineError<boolean> {
+    const container = document.getElementById('documentList');
+    if (!container) {
+      return error('Document list container not found in DOM');
+    }
+    // Render logic...
+    return success(true); // Operation completed successfully
+  }
+}
+
+// Controller layer
+class AppController {
+  async init(): Promise<void> {
+    const [fetchError, documents] = await this.documentService.fetchDocuments();
+    if (fetchError) {
+      this.notificationManager.showNotification({ message: fetchError });
+      return;
+    }
+
+    const [renderError] = this.uiRenderer.renderDocuments(documents, callback);
+    if (renderError) {
+      console.error('UI render failed:', renderError);
+      return;
+    }
+    
+    // Both operations successful - continue initialization
+  }
+}
+```
+
+#### ✅ Advantages over try/catch
+
+- **Explicit**: Errors are part of the function signature
+- **Composable**: Errors propagate naturally through the call stack
+- **Type-safe**: TypeScript knows when you have handled the error case
+- **Predictable**: No hidden exceptions or silent failures
+- **Functional**: Encourages immutable error handling patterns
 
 ### 🎯 Why Vanilla TypeScript?
 
