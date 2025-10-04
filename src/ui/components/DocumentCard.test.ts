@@ -25,7 +25,7 @@ describe('DocumentCard', () => {
       createdAt: new Date('2024-01-15'),
       id: 'd1',
       name: 'Test Document',
-      version: 1
+      version: '1.0.0'
     });
 
     card = new DocumentCard();
@@ -56,7 +56,7 @@ describe('DocumentCard', () => {
     expect(shadowRoot).not.toBeNull();
 
     const cardVersion = shadowRoot?.querySelector('.card-version');
-    expect(cardVersion?.textContent).toBe('Version 1');
+    expect(cardVersion?.textContent).toBe('Version 1.0.0');
   });
 
   it('should render contributors', () => {
@@ -75,7 +75,7 @@ describe('DocumentCard', () => {
       createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
       id: 'd2',
       name: 'Recent Document',
-      version: 1
+      version: '1.0.0'
     });
 
     card.document = recentDocument;
