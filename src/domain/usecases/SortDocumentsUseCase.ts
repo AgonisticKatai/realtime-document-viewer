@@ -11,7 +11,7 @@ export class SortDocumentsUseCase {
     const sorted = [...documents];
 
     const sortStrategies = {
-      createdAt: (a: Document, b: Document) => a.createdAt.getTime() - b.createdAt.getTime(),
+      createdAt: (a: Document, b: Document) => b.createdAt.getTime() - a.createdAt.getTime(),
       name: (a: Document, b: Document) => a.name.localeCompare(b.name),
       version: (a: Document, b: Document) => a.version - b.version
     };
