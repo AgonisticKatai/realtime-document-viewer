@@ -1,12 +1,13 @@
 import { InlineError } from '../domain/errors';
 import { Document } from '../domain/models/Document';
-import { CreateDocumentUseCase, CreateDocumentInput } from '../domain/usecases/CreateDocumentUseCase';
+import { CreateDocumentUseCase } from '../domain/usecases/CreateDocumentUseCase';
 import { GetDocumentsUseCase } from '../domain/usecases/GetDocumentsUseCase';
 import { SortDocumentsUseCase } from '../domain/usecases/SortDocumentsUseCase';
 import { HttpDocumentRepository } from '../infrastructure/http/HttpDocumentRepository';
 
 import type { DocumentServiceConfig } from './types';
 import type { SortBy } from '../domain/types';
+import type { CreateDocumentInput } from '../domain/usecases/CreateDocumentUseCase';
 import type { HttpRepositoryConfig } from '../infrastructure/http/types';
 
 export class DocumentService {
