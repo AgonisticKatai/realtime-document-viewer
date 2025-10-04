@@ -19,7 +19,7 @@ A scalable document management application built with vanilla TypeScript, Web Co
 - [🚀 Setup](#-setup)
 - [💻 Development](#-development)
 - [🧪 Testing Strategy](#-testing-strategy)
-- [🤔 Project Decisions](#-project-decisions)
+- [🤔 Key Architectural Decisions](#-key-architectural-decisions)
 
 ## 🏗️ Architecture
 
@@ -341,7 +341,7 @@ For optimal development experience, add to your workspace settings (.vscode/sett
 
 Coverage focuses on business logic and critical paths. UI components have basic smoke tests.
 
-## 🤔 Project Decisions
+## 🤔 Key Architectural Decisions
 
 ### 🎯 Why Service-Oriented Architecture?
 
@@ -473,19 +473,19 @@ class AppController {
 
 Demonstrates deep understanding of web standards and JavaScript fundamentals without framework abstraction.
 
-### 🔷 Why Hexagonal Architecture + Services?
+### 🔷 Why Hexagonal Architecture + Service Layer?
 
 **Hexagonal Architecture (Ports & Adapters):**
-- ✅ Clean separation of concerns
-- 🧪 Testable business logic  
-- 🔄 Easy to swap implementations
-- 🌐 Framework-agnostic domain
+- ✅ **Clean separation of concerns** - Business logic isolated from infrastructure
+- 🧪 **Testable business logic** - Domain can be tested without external dependencies
+- 🔄 **Easy to swap implementations** - HTTP can be replaced with GraphQL, etc.
+- 🌐 **Framework-agnostic domain** - Business rules independent of UI framework
 
 **+ Service Layer Benefits:**
 - 🎯 **Facade Pattern**: Services simplify complex domain interactions
 - 🎛️ **Orchestration**: AppController coordinates without business logic
-- 📄 **State Management**: DocumentService manages application state
-- 🎨 **Presentation Logic**: UIRenderer handles view concerns
+- 📄 **Application State**: DocumentService manages cross-cutting concerns
+- 🎨 **Presentation Logic**: UIRenderer handles view-specific operations
 
 ### 🧩 Why Web Components?
 
@@ -504,11 +504,11 @@ Demonstrates deep understanding of web standards and JavaScript fundamentals wit
 
 ### ⚡ Why Client-Side Sorting?
 
-The API returns random documents on each request. Client-side sorting:
-- 🚫 Eliminates unnecessary HTTP calls
-- 📊 Maintains data consistency
-- 🏃‍♂️ Improves performance
-- 😊 Better UX (instant response)
+The server API returns documents in random order on each request. Client-side sorting provides:
+- 🚫 **Eliminates unnecessary HTTP calls** - No server round-trips for sorting
+- 📊 **Maintains data consistency** - User's sort preference preserved across interactions
+- 🏃‍♂️ **Improves performance** - Instant sorting without network latency
+- 😊 **Better UX** - Immediate visual feedback and responsive interface
 
 ### 🎯 Why Separate Use Cases?
 
