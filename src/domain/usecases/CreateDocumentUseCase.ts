@@ -3,14 +3,10 @@ import { InlineError, error, success } from '../errors';
 import { Contributor } from '../models/Contributor';
 import { Document } from '../models/Document';
 
-export interface CreateDocumentInput {
-  attachments: string[];
-  contributors: string[];
-  name: string;
-}
+import type { CreateDocumentProps } from '../types';
 
 export class CreateDocumentUseCase {
-  execute({ attachments, contributors, name }: CreateDocumentInput): InlineError<Document> {
+  execute({ attachments, contributors, name }: CreateDocumentProps): InlineError<Document> {
     if (!name || name.trim().length === 0) {
       return error('Document name is required');
     }
