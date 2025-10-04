@@ -23,7 +23,7 @@ describe('DocumentMapper', () => {
 
     expect(document.id).toBe('d1');
     expect(document.name).toBe('Test Document');
-    expect(document.version).toBe(2);
+    expect(document.version).toBe('2.1.0');
     expect(document.attachments).toEqual(['attachment1', 'attachment2']);
     expect(document.contributors).toHaveLength(2);
     expect(document.contributors[0].id).toBe('c1');
