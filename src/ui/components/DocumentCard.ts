@@ -13,6 +13,7 @@ export class DocumentCard extends HTMLElement {
   }
 
   connectedCallback(): void {
+    this.setAttribute('mode', this._mode);
     this.render();
   }
 
@@ -31,6 +32,7 @@ export class DocumentCard extends HTMLElement {
 
   set mode(value: ViewMode) {
     this._mode = value;
+    this.setAttribute('mode', value);
     this.render();
   }
 
@@ -56,8 +58,8 @@ export class DocumentCard extends HTMLElement {
       >
         <header class="card-header">
           <h3 class="card-title" id="title-${this._document.id}">${this.escapeHtml(this._document.name)}</h3>
+          <div class="card-version">Version ${this._document.version}</div>
           <div class="card-meta">
-            <span aria-label="Version ${this._document.version}" class="card-version">Version ${this._document.version}</span>
             <time 
               class="card-date"
               datetime="${this._document.createdAt.toISOString()}" 
@@ -68,27 +70,29 @@ export class DocumentCard extends HTMLElement {
           </div>
         </header>
         
-        <section class="card-section">
-          <h4 class="section-title">Contributors</h4>
-          <div 
-            aria-label="${this._document.contributors.length} contributors"
-            class="contributor-list" 
-            role="list"
-          >
-            ${this.renderContributors(this._document)}
-          </div>
-        </section>
-        
-        <section class="card-section">
-          <h4 class="section-title">Attachments</h4>
-          <div 
-            aria-label="${this._document.attachments.length} attachments"
-            class="attachment-list" 
-            role="list"
-          >
-            ${this.renderAttachments(this._document)}
-          </div>
-        </section>
+        <div class="card-sections">
+          <section class="card-section">
+            <h4 class="section-title">Contributors</h4>
+            <div 
+              aria-label="${this._document.contributors.length} contributors"
+              class="contributor-list" 
+              role="list"
+            >
+              ${this.renderContributors(this._document)}
+            </div>
+          </section>
+          
+          <section class="card-section">
+            <h4 class="section-title">Attachments</h4>
+            <div 
+              aria-label="${this._document.attachments.length} attachments"
+              class="attachment-list" 
+              role="list"
+            >
+              ${this.renderAttachments(this._document)}
+            </div>
+          </section>
+        </div>
       </article>
     `;
   }
