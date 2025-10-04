@@ -57,13 +57,13 @@ describe('SortDocumentsUseCase', () => {
     expect(sorted?.[2].version).toBe(3);
   });
 
-  it('should sort documents by createdAt', () => {
+  it('should sort documents by createdAt (most recent first)', () => {
     const [error, sorted] = useCase.execute({ documents, sortBy: 'createdAt' });
 
     expect(error).toBeNull();
-    expect(sorted?.[0].createdAt.getTime()).toBe(new Date('2024-01-10').getTime());
+    expect(sorted?.[0].createdAt.getTime()).toBe(new Date('2024-01-20').getTime());
     expect(sorted?.[1].createdAt.getTime()).toBe(new Date('2024-01-15').getTime());
-    expect(sorted?.[2].createdAt.getTime()).toBe(new Date('2024-01-20').getTime());
+    expect(sorted?.[2].createdAt.getTime()).toBe(new Date('2024-01-10').getTime());
   });
 
   it('should not mutate original array', () => {
