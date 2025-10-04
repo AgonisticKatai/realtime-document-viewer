@@ -13,10 +13,17 @@ export class SortDocumentsUseCase {
     const sortStrategies = {
       createdAt: (a: Document, b: Document) => b.createdAt.getTime() - a.createdAt.getTime(),
       name: (a: Document, b: Document) => a.name.localeCompare(b.name),
-      version: (a: Document, b: Document) => a.version - b.version
+      version: (a: Document, b: Document) => this.compareVersions(a.version, b.version)
     };
 
     sorted.sort(sortStrategies[sortBy]);
     return success(sorted);
+  }
+
+  private compareVersions(versionA: string, versionB: string): number {
+    const [major1, minor1, patch1] = versionA.split('.').map(Number);
+    const [major2, minor2, patch2] = versionB.split('.').map(Number);
+
+    return (major1 - major2) || (minor1 - minor2) || (patch1 - patch2);
   }
 }
