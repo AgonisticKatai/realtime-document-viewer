@@ -1,3 +1,4 @@
+import { InlineError, error, success } from '../domain/errors';
 import { WebSocketNotificationService } from '../infrastructure/websocket/WebSocketNotificationService';
 import { NotificationToast } from '../ui/components/NotificationToast';
 
@@ -14,8 +15,14 @@ export class NotificationManager {
     this.notificationService = new WebSocketNotificationService(wsConfig);
   }
 
-  connect(): void {
-    this.notificationService.connect();
+  connect(): InlineError<boolean> {
+    try {
+      this.notificationService.connect();
+      return success(true);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to connect to notification service';
+      return error(errorMessage);
+    }
   }
 
   onNotification(callback: (data: NotificationDisplayData) => void): void {
@@ -28,21 +35,28 @@ export class NotificationManager {
     });
   }
 
-  showNotification({ documentTitle, userName }: NotificationDisplayData): void {
+  showNotification({ documentTitle, userName }: NotificationDisplayData): InlineError<boolean> {
     const container = document.getElementById('notifications');
     if (!container) {
-      return;
+      return error('Notifications container not found in DOM');
     }
 
-    const toast = new NotificationToast();
-    container.appendChild(toast);
+    try {
+      const toast = new NotificationToast();
+      container.appendChild(toast);
 
-    toast.show({ documentTitle, userName });
+      toast.show({ documentTitle, userName });
 
-    setTimeout(() => {
-      if (container.contains(toast)) {
-        container.removeChild(toast);
-      }
-    }, 3500);
+      setTimeout(() => {
+        if (container.contains(toast)) {
+          container.removeChild(toast);
+        }
+      }, 3500);
+
+      return success(true);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to show notification';
+      return error(errorMessage);
+    }
   }
 }
