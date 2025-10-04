@@ -6,7 +6,7 @@ export interface DocumentProps {
   createdAt: Date;
   id: string;
   name: string;
-  version: number;
+  version: string;
 }
 
 export class Document {
@@ -15,7 +15,7 @@ export class Document {
   readonly createdAt: Date;
   readonly id: string;
   readonly name: string;
-  readonly version: number;
+  readonly version: string;
 
   private constructor(props: DocumentProps) {
     this.attachments = props.attachments;
@@ -36,8 +36,12 @@ export class Document {
       throw new Error('Document name cannot be empty');
     }
 
-    if (props.version < 1) {
-      throw new Error('Document version must be at least 1');
+    if (!props.version || props.version.trim() === '') {
+      throw new Error('Document version cannot be empty');
+    }
+
+    if (!/^\d+\.\d+\.\d+$/.test(props.version)) {
+      throw new Error('Document version must follow semantic versioning format (x.y.z)');
     }
   }
 }
