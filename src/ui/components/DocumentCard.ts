@@ -1,5 +1,6 @@
 import styles from './DocumentCard.css?inline';
 import { Document } from '../../domain/models/Document';
+import { formatAbsoluteDate, formatRelativeTime } from '../../utils/dateUtils';
 
 import type { ViewMode } from '../types';
 
@@ -41,11 +42,8 @@ export class DocumentCard extends HTMLElement {
       return;
     }
 
-    const formattedDate = this._document.createdAt.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    const absoluteDate = formatAbsoluteDate(this._document.createdAt);
+    const relativeDate = formatRelativeTime(this._document.createdAt);
 
     this.shadowRoot.innerHTML = `
       <style>${styles}</style>
@@ -63,9 +61,9 @@ export class DocumentCard extends HTMLElement {
             <time 
               class="card-date"
               datetime="${this._document.createdAt.toISOString()}" 
-              title="Created on ${formattedDate}"
+              title="Created on ${absoluteDate}"
             >
-              ${formattedDate}
+              ${relativeDate}
             </time>
           </div>
         </header>
