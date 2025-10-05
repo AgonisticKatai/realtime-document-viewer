@@ -16,7 +16,7 @@ A scalable document management application built with vanilla TypeScript, Web Co
 ![Create Document Form](./docs/images/form.png)
 *Accessible form interface for creating new documents with validation and real-time feedback*
 
-## � Table of Contents
+## 📦 Table of Contents
 
 - [🏗️ Architecture](#️-architecture)
   - [🔷 Hexagonal Architecture + Service Layer](#-hexagonal-architecture--service-layer)
