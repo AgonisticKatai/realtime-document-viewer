@@ -2,15 +2,15 @@
 
 A scalable document management application built with vanilla TypeScript, Web Components, and modern CSS. Features real-time WebSocket notifications, client-side sorting, and dual view modes.
 
-## �️ Application Overview
-
-### 📊 **List View Mode**
-![List View](./docs/images/list-mode.png)
-*Clean list layout showing documents with metadata, version info, and contributor details*
+## 🖼️ Application Overview
 
 ### 🎯 **Grid View Mode**  
 ![Grid View](./docs/images/grid-mode.png)
 *Card-based grid layout optimized for visual browsing and quick document recognition*
+
+### 📊 **List View Mode**
+![List View](./docs/images/list-mode.png)
+*Clean list layout showing documents with metadata, version info, and contributor details*
 
 ### ➕ **Document Creation**
 ![Create Document Form](./docs/images/form.png)
