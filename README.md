@@ -5,7 +5,7 @@ A scalable document management application built with vanilla TypeScript, Web Co
 ## �️ Application Overview
 
 ### 📊 **List View Mode**
-![List View](./docs/images/list-model.png)
+![List View](./docs/images/list-mode.png)
 *Clean list layout showing documents with metadata, version info, and contributor details*
 
 ### 🎯 **Grid View Mode**  
