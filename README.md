@@ -1,4 +1,4 @@
-# 📄 Real-Time Doc## 📖 Table of Contents# 📋 Table of Contentsment Manager
+# 📄 Real-Time Document Manager
 
 A scalable document management application built with vanilla TypeScript, Web Components, and modern CSS. Features real-time WebSocket notifications, client-side sorting, and dual view modes.
 
