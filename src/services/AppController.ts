@@ -2,38 +2,16 @@ import { DocumentService } from './DocumentService';
 import { NotificationManager } from './NotificationManager';
 import { UIRenderer } from './UIRenderer';
 import { Document } from '../domain/models/Document';
-import { GetDocumentsUseCase } from '../domain/usecases/GetDocumentsUseCase';
-import { SortDocumentsUseCase } from '../domain/usecases/SortDocumentsUseCase';
-import { CreateDocumentUseCase } from '../domain/usecases/CreateDocumentUseCase';
-import { HttpDocumentRepository } from '../infrastructure/http/HttpDocumentRepository';
-import { WebSocketNotificationService } from '../infrastructure/websocket/WebSocketNotificationService';
 
 import type { SortBy } from '../domain/types';
 import type { ViewMode, DocumentFormElement } from '../ui/types';
 
 export class AppController {
-  private documentService: DocumentService;
-  private uiRenderer: UIRenderer;
-  private notificationManager: NotificationManager;
-
-  constructor() {
-    const repository = new HttpDocumentRepository({ baseUrl: 'http://localhost:8080' });
-    const getDocumentsUseCase = new GetDocumentsUseCase(repository);
-    const sortDocumentsUseCase = new SortDocumentsUseCase();
-    const createDocumentUseCase = new CreateDocumentUseCase();
-
-    this.documentService = new DocumentService(
-      getDocumentsUseCase,
-      sortDocumentsUseCase,
-      createDocumentUseCase
-    );
-    this.uiRenderer = new UIRenderer();
-
-    const notificationService = new WebSocketNotificationService({
-      url: 'ws://localhost:8080/notifications'
-    });
-    this.notificationManager = new NotificationManager(notificationService);
-  }
+  constructor(
+    private readonly documentService: DocumentService,
+    private readonly uiRenderer: UIRenderer,
+    private readonly notificationManager: NotificationManager
+  ) {}
 
   async init(): Promise<void> {
     await this.loadDocuments();

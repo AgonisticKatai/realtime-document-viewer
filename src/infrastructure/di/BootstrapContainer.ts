@@ -57,7 +57,11 @@ export function createApplicationContainer(config: ApplicationConfig): Container
   );
 
   container.register('AppController', () =>
-    new AppController()
+    new AppController(
+      container.resolve('DocumentService'),
+      container.resolve('UIRenderer'),
+      container.resolve('NotificationManager')
+    )
   );
 
   return container;
