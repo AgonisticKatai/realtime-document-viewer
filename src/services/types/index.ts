@@ -4,3 +4,8 @@ export type {
   UIRendererConfig,
   NotificationDisplayData
 } from './ServiceTypes';
+
+export type {
+  DocumentCardElement,
+  DocumentCardFactory
+} from './UIFactoryTypes';

@@ -1,11 +1,13 @@
 import { InlineError, success, error } from '../domain/errors';
 import { Document } from '../domain/models/Document';
-import { DocumentCard } from '../ui/components/DocumentCard';
 
 import type { ViewMode } from '../ui/types';
+import type { DocumentCardFactory } from './types';
 
 export class UIRenderer {
   private currentViewMode: ViewMode = 'grid';
+
+  constructor(private readonly cardFactory: DocumentCardFactory) {}
 
   setViewMode(mode: ViewMode): void {
     this.currentViewMode = mode;
@@ -24,7 +26,7 @@ export class UIRenderer {
         : 'document-list';
 
       documents.forEach(doc => {
-        const card = new DocumentCard();
+        const card = this.cardFactory.createCard();
         card.document = doc;
         card.mode = this.currentViewMode;
         container.appendChild(card);

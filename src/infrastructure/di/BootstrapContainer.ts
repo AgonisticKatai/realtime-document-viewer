@@ -8,6 +8,7 @@ import { DocumentService } from '../../services/DocumentService';
 import { NotificationManager } from '../../services/NotificationManager';
 import { UIRenderer } from '../../services/UIRenderer';
 import { AppController } from '../../services/AppController';
+import { WebComponentCardFactory } from '../../ui/factories/WebComponentCardFactory';
 
 import type { DocumentRepository } from '../../domain/repositories/DocumentRepository';
 import type { NotificationService } from '../../domain/services/NotificationService';
@@ -52,8 +53,12 @@ export function createApplicationContainer(config: ApplicationConfig): Container
     new NotificationManager(container.resolve<NotificationService>('NotificationService'))
   );
 
+  container.register('DocumentCardFactory', () =>
+    new WebComponentCardFactory()
+  );
+
   container.register('UIRenderer', () =>
-    new UIRenderer()
+    new UIRenderer(container.resolve('DocumentCardFactory'))
   );
 
   container.register('AppController', () =>
