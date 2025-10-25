@@ -24,8 +24,8 @@ describe('Container', () => {
       const factory = () => ({ id: ++counter });
       container.register('counter', factory);
 
-      const instance1 = container.resolve('counter');
-      const instance2 = container.resolve('counter');
+      const instance1 = container.resolve<{ id: number }>('counter');
+      const instance2 = container.resolve<{ id: number }>('counter');
 
       expect(instance1.id).toBe(1);
       expect(instance2.id).toBe(1);
@@ -42,8 +42,8 @@ describe('Container', () => {
       container.register('service1', () => ({ name: 'Service 1' }));
       container.register('service2', () => ({ name: 'Service 2' }));
 
-      const service1 = container.resolve('service1');
-      const service2 = container.resolve('service2');
+      const service1 = container.resolve<{ name: string }>('service1');
+      const service2 = container.resolve<{ name: string }>('service2');
 
       expect(service1.name).toBe('Service 1');
       expect(service2.name).toBe('Service 2');
@@ -89,8 +89,8 @@ describe('Container', () => {
         repo: container.resolve('repository')
       }));
 
-      const service1 = container.resolve('service1');
-      const service2 = container.resolve('service2');
+      const service1 = container.resolve<{ repo: { id: number } }>('service1');
+      const service2 = container.resolve<{ repo: { id: number } }>('service2');
 
       expect(repositoryInstances).toBe(1);
       expect(service1.repo).toBe(service2.repo);
@@ -126,7 +126,7 @@ describe('Container', () => {
       container.clear();
       container.register('test', () => ({ value: 2 }));
 
-      const instance = container.resolve('test');
+      const instance = container.resolve<{ value: number }>('test');
 
       expect(instance.value).toBe(2);
     });
