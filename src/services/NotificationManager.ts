@@ -1,19 +1,11 @@
 import { InlineError, error, success } from '../domain/errors';
-import { WebSocketNotificationService } from '../infrastructure/websocket/WebSocketNotificationService';
 import { NotificationToast } from '../ui/components/NotificationToast';
 
-import type { NotificationManagerConfig, NotificationDisplayData } from './types';
-import type { WebSocketConfig } from '../infrastructure/websocket/types';
+import type { NotificationDisplayData } from './types';
+import type { NotificationService } from '../domain/services/NotificationService';
 
 export class NotificationManager {
-  private readonly notificationService: WebSocketNotificationService;
-
-  constructor(config: NotificationManagerConfig = { websocketUrl: 'ws://localhost:8080/notifications' }) {
-    const wsConfig: WebSocketConfig = {
-      url: config.websocketUrl
-    };
-    this.notificationService = new WebSocketNotificationService(wsConfig);
-  }
+  constructor(private readonly notificationService: NotificationService) {}
 
   connect(): InlineError<boolean> {
     try {

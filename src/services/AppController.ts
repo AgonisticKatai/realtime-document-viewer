@@ -6,6 +6,7 @@ import { GetDocumentsUseCase } from '../domain/usecases/GetDocumentsUseCase';
 import { SortDocumentsUseCase } from '../domain/usecases/SortDocumentsUseCase';
 import { CreateDocumentUseCase } from '../domain/usecases/CreateDocumentUseCase';
 import { HttpDocumentRepository } from '../infrastructure/http/HttpDocumentRepository';
+import { WebSocketNotificationService } from '../infrastructure/websocket/WebSocketNotificationService';
 
 import type { SortBy } from '../domain/types';
 import type { ViewMode, DocumentFormElement } from '../ui/types';
@@ -27,7 +28,11 @@ export class AppController {
       createDocumentUseCase
     );
     this.uiRenderer = new UIRenderer();
-    this.notificationManager = new NotificationManager();
+
+    const notificationService = new WebSocketNotificationService({
+      url: 'ws://localhost:8080/notifications'
+    });
+    this.notificationManager = new NotificationManager(notificationService);
   }
 
   async init(): Promise<void> {

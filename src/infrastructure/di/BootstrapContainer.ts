@@ -49,7 +49,7 @@ export function createApplicationContainer(config: ApplicationConfig): Container
   );
 
   container.register('NotificationManager', () =>
-    new NotificationManager({ websocketUrl: config.websocketUrl })
+    new NotificationManager(container.resolve<NotificationService>('NotificationService'))
   );
 
   container.register('UIRenderer', () =>
