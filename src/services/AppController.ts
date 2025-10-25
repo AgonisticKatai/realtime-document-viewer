@@ -2,6 +2,10 @@ import { DocumentService } from './DocumentService';
 import { NotificationManager } from './NotificationManager';
 import { UIRenderer } from './UIRenderer';
 import { Document } from '../domain/models/Document';
+import { GetDocumentsUseCase } from '../domain/usecases/GetDocumentsUseCase';
+import { SortDocumentsUseCase } from '../domain/usecases/SortDocumentsUseCase';
+import { CreateDocumentUseCase } from '../domain/usecases/CreateDocumentUseCase';
+import { HttpDocumentRepository } from '../infrastructure/http/HttpDocumentRepository';
 
 import type { SortBy } from '../domain/types';
 import type { ViewMode, DocumentFormElement } from '../ui/types';
@@ -12,7 +16,16 @@ export class AppController {
   private notificationManager: NotificationManager;
 
   constructor() {
-    this.documentService = new DocumentService();
+    const repository = new HttpDocumentRepository({ baseUrl: 'http://localhost:8080' });
+    const getDocumentsUseCase = new GetDocumentsUseCase(repository);
+    const sortDocumentsUseCase = new SortDocumentsUseCase();
+    const createDocumentUseCase = new CreateDocumentUseCase();
+
+    this.documentService = new DocumentService(
+      getDocumentsUseCase,
+      sortDocumentsUseCase,
+      createDocumentUseCase
+    );
     this.uiRenderer = new UIRenderer();
     this.notificationManager = new NotificationManager();
   }

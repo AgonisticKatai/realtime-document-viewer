@@ -41,7 +41,11 @@ export function createApplicationContainer(config: ApplicationConfig): Container
   );
 
   container.register('DocumentService', () =>
-    new DocumentService({ apiBaseUrl: config.apiBaseUrl })
+    new DocumentService(
+      container.resolve('GetDocumentsUseCase'),
+      container.resolve('SortDocumentsUseCase'),
+      container.resolve('CreateDocumentUseCase')
+    )
   );
 
   container.register('NotificationManager', () =>

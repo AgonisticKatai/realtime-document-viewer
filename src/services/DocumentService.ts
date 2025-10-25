@@ -3,26 +3,17 @@ import { Document } from '../domain/models/Document';
 import { CreateDocumentUseCase } from '../domain/usecases/CreateDocumentUseCase';
 import { GetDocumentsUseCase } from '../domain/usecases/GetDocumentsUseCase';
 import { SortDocumentsUseCase } from '../domain/usecases/SortDocumentsUseCase';
-import { HttpDocumentRepository } from '../infrastructure/http/HttpDocumentRepository';
 
-import type { DocumentServiceConfig } from './types';
 import type { SortBy, CreateDocumentProps } from '../domain/types';
-import type { HttpRepositoryConfig } from '../infrastructure/http/types';
 
 export class DocumentService {
   private allDocuments: Document[] = [];
-  private readonly repository: HttpDocumentRepository;
-  private readonly getDocumentsUseCase: GetDocumentsUseCase;
-  private readonly sortDocumentsUseCase: SortDocumentsUseCase;
-  private readonly createDocumentUseCase: CreateDocumentUseCase;
 
-  constructor(config: DocumentServiceConfig = { apiBaseUrl: 'http://localhost:8080' }) {
-    const repositoryConfig: HttpRepositoryConfig = { baseUrl: config.apiBaseUrl };
-    this.repository = new HttpDocumentRepository(repositoryConfig);
-    this.getDocumentsUseCase = new GetDocumentsUseCase(this.repository);
-    this.sortDocumentsUseCase = new SortDocumentsUseCase();
-    this.createDocumentUseCase = new CreateDocumentUseCase();
-  }
+  constructor(
+    private readonly getDocumentsUseCase: GetDocumentsUseCase,
+    private readonly sortDocumentsUseCase: SortDocumentsUseCase,
+    private readonly createDocumentUseCase: CreateDocumentUseCase
+  ) {}
 
   async fetchDocuments(): Promise<InlineError<Document[]>> {
     const [error, documents] = await this.getDocumentsUseCase.execute();
