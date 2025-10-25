@@ -23,6 +23,8 @@ A scalable document management application built with vanilla TypeScript, Web Co
   - [🔷 Hexagonal Architecture Layers](#-hexagonal-architecture-layers)
   - [🏗️ Type Organization Strategy](#️-type-organization-strategy)
   - [🎛️ Service Layer Architecture](#️-service-layer-architecture)
+  - [💉 Dependency Injection Container](#-dependency-injection-container)
+  - [🎨 Design Patterns Implemented](#-design-patterns-implemented)
 - [🎯 Type Safety & Code Quality](#-type-safety--code-quality)
   - [🏗️ Enhanced TypeScript Architecture](#️-enhanced-typescript-architecture)
 - [🚨 Error Handling System](#-error-handling-system)
@@ -85,6 +87,8 @@ src/
 │       └── types/           # 📋 WebSocket configuration types
 ├── ui/                      # 🎨 PRIMARY ADAPTERS (Web Components)
 │   ├── components/          # 🧩 Web Components (*.ts + *.css + *.test.ts)
+│   ├── factories/           # 🏭 Component factories
+│   │   └── WebComponentCardFactory.ts # 🏭 Web component card factory
 │   └── types/               # 📋 UI component interfaces
 ├── utils/                   # 🛠️ Shared utilities
 │   └── dateUtils.ts         # 📅 Date formatting utilities
@@ -182,7 +186,8 @@ export interface DocumentManagementPort {
 #### 🎨 **UIRenderer** - Presentation Service
 - Handles all DOM manipulation and rendering
 - Manages view modes and UI state
-- Provides clean interface for UI operations
+- Uses Factory Pattern via `DocumentCardFactory` to create UI components
+- Decoupled from concrete component implementations (easy to swap UI frameworks)
 
 #### 🔔 **NotificationManager** - Real-time Communication
 - Manages WebSocket connections and notifications
@@ -220,7 +225,99 @@ function createApplicationContainer(config: ApplicationConfig): Container
 - **♻️ Reusability**: Same container setup across environments
 - **📦 Type Safety**: Full TypeScript support with generics
 
-**Current Status**: The DI container infrastructure is in place. Next steps will refactor service layer components to accept dependencies via constructor injection instead of creating them directly.
+**Architecture Status**: ✅ **Complete** - All layers fully decoupled with dependency injection, primary/secondary ports defined, and factory patterns implemented.
+
+### 🎨 **Design Patterns Implemented**
+
+#### 🏭 **Abstract Factory Pattern**
+Used to decouple UIRenderer from concrete UI component implementations:
+
+```typescript
+// Factory Interface (Abstract)
+export interface DocumentCardFactory {
+  createCard(): DocumentCardElement;
+}
+
+// Concrete Factory
+export class WebComponentCardFactory implements DocumentCardFactory {
+  createCard(): DocumentCardElement {
+    return new DocumentCard();
+  }
+}
+
+// Consumer (UIRenderer)
+export class UIRenderer {
+  constructor(private readonly cardFactory: DocumentCardFactory) {}
+
+  renderDocuments(documents: Document[]): void {
+    documents.forEach(doc => {
+      const card = this.cardFactory.createCard(); // ✅ No direct coupling
+      card.document = doc;
+    });
+  }
+}
+```
+
+**Benefits:**
+- ✅ UIRenderer doesn't know about DocumentCard implementation
+- ✅ Easy to swap Web Components for React/Vue/Angular
+- ✅ Testable with mock factories
+
+#### 💉 **Dependency Injection Pattern**
+All dependencies injected via constructor throughout the application:
+
+```typescript
+// Service Layer accepts interfaces
+export class AppController {
+  constructor(
+    private readonly documentService: DocumentManagementPort, // ✅ Interface
+    private readonly uiRenderer: UIRenderer,
+    private readonly notificationManager: NotificationManager
+  ) {}
+}
+
+// Wired in composition root
+const container = createApplicationContainer(config);
+const appController = container.resolve('AppController');
+```
+
+#### 🔌 **Ports and Adapters Pattern**
+Clear separation between domain logic and infrastructure:
+
+```typescript
+// PRIMARY PORT (defines what the app can do)
+export interface DocumentManagementPort {
+  fetchDocuments(): Promise<InlineError<Document[]>>;
+  sortDocuments(sortBy: SortBy): InlineError<Document[]>;
+}
+
+// SECONDARY PORT (defines what the app needs)
+export interface DocumentRepository {
+  getAll(): Promise<InlineError<Document[]>>;
+}
+
+// ADAPTER (infrastructure implementation)
+export class HttpDocumentRepository implements DocumentRepository {
+  async getAll(): Promise<InlineError<Document[]>> { /* HTTP logic */ }
+}
+```
+
+#### 🏗️ **Repository Pattern**
+Abstracts data access behind interfaces:
+- `DocumentRepository` interface in domain
+- `HttpDocumentRepository` implementation in infrastructure
+- Easy to swap for GraphQL, gRPC, or in-memory implementations
+
+#### 🎯 **Use Case Pattern**
+Each business operation isolated in its own class:
+- `GetDocumentsUseCase` - Fetch documents
+- `CreateDocumentUseCase` - Create new document
+- `SortDocumentsUseCase` - Sort documents
+
+**Benefits:**
+- ✅ Single Responsibility Principle
+- ✅ Easy to test individually
+- ✅ Clear business logic boundaries
 
 ## 🎯 Type Safety & Code Quality
 
