@@ -56,9 +56,11 @@ src/
 │       └── DomainTypes.ts    # 🔗 Domain-related service types
 ├── domain/                    # 🔷 HEXAGON CORE - Business Logic
 │   ├── models/               # 📝 Business entities
-│   ├── repositories/         # 🔌 Repository interfaces (PRIMARY PORTS)
+│   ├── ports/                # 🔌 PRIMARY PORTS - Application interfaces
+│   │   └── DocumentManagementPort.ts # 📋 Use case orchestration contract
+│   ├── repositories/         # 🔌 SECONDARY PORTS - Repository interfaces
 │   ├── usecases/            # ⚡ Business use cases
-│   ├── services/            # 🔌 Domain service interfaces
+│   ├── services/            # 🔌 SECONDARY PORTS - Domain service interfaces
 │   ├── errors/              # 🚨 InlineError functional pattern
 │   ├── constants.ts         # 🔢 Domain constants (INITIAL_DOCUMENT_VERSION)
 │   └── types/               # 📋 Domain types & enums
@@ -106,13 +108,30 @@ src/
 - **Services**: Business facades (DocumentService, UIRenderer, NotificationManager)
 - **Types**: Service configuration interfaces organized by responsibility
 
-#### 🔌 **Primary Ports & Adapters (Driving Side)** 
-- **Ports**: Service interfaces, Repository interfaces
-- **Adapters**: Web Components (UI), Service Layer (Application logic)
+#### 🔌 **Primary Ports & Adapters (Driving Side)**
+- **Ports**: `DocumentManagementPort` - Defines how external actors (UI, CLI, API) interact with use cases
+- **Adapters**:
+  - `AppController` - Orchestrates application flow
+  - `DocumentService` - Implements `DocumentManagementPort`, coordinates use case execution
+  - Web Components (UI layer)
+
+**Example Primary Port:**
+```typescript
+export interface DocumentManagementPort {
+  fetchDocuments(): Promise<InlineError<Document[]>>;
+  getAllDocuments(): Document[];
+  sortDocuments(sortBy: SortBy): InlineError<Document[]>;
+  createDocument(input: CreateDocumentProps): InlineError<Document>;
+}
+```
 
 #### 🔧 **Secondary Ports & Adapters (Driven Side)**
-- **Ports**: Repository interfaces, Domain service interfaces
-- **Adapters**: HttpDocumentRepository, WebSocketNotificationService
+- **Ports**:
+  - `DocumentRepository` - Data persistence abstraction
+  - `NotificationService` - Real-time notification abstraction
+- **Adapters**:
+  - `HttpDocumentRepository` - HTTP implementation of DocumentRepository
+  - `WebSocketNotificationService` - WebSocket implementation of NotificationService
 - **Infrastructure Types**: Configuration interfaces organized by adapter type
 
 ### 🏗️ **Type Organization Strategy**

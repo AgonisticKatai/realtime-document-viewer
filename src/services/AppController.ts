@@ -1,14 +1,14 @@
-import { DocumentService } from './DocumentService';
 import { NotificationManager } from './NotificationManager';
 import { UIRenderer } from './UIRenderer';
 import { Document } from '../domain/models/Document';
 
 import type { SortBy } from '../domain/types';
 import type { ViewMode, DocumentFormElement } from '../ui/types';
+import type { DocumentManagementPort } from '../domain/ports';
 
 export class AppController {
   constructor(
-    private readonly documentService: DocumentService,
+    private readonly documentService: DocumentManagementPort,
     private readonly uiRenderer: UIRenderer,
     private readonly notificationManager: NotificationManager
   ) {}

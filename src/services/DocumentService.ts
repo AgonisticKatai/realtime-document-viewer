@@ -5,8 +5,9 @@ import { GetDocumentsUseCase } from '../domain/usecases/GetDocumentsUseCase';
 import { SortDocumentsUseCase } from '../domain/usecases/SortDocumentsUseCase';
 
 import type { SortBy, CreateDocumentProps } from '../domain/types';
+import type { DocumentManagementPort } from '../domain/ports';
 
-export class DocumentService {
+export class DocumentService implements DocumentManagementPort {
   private allDocuments: Document[] = [];
 
   constructor(
