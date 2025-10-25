@@ -66,6 +66,9 @@ src/
 │       ├── UseCaseTypes.ts  # ⚡ Use case Props interfaces
 │       └── SortTypes.ts     # 📊 Sorting enums
 ├── infrastructure/           # 🔧 SECONDARY ADAPTERS
+│   ├── di/                  # 💉 Dependency Injection
+│   │   ├── Container.ts     # 💉 DI Container implementation
+│   │   └── BootstrapContainer.ts # 🚀 Application composition root
 │   ├── http/                # 🌐 HTTP API adapter
 │   │   ├── HttpDocumentRepository.ts # 🌐 Repository implementation
 │   │   ├── dtos/            # 📦 HTTP Data Transfer Objects
@@ -166,6 +169,39 @@ src/
 - Manages WebSocket connections and notifications
 - Handles notification display and lifecycle
 - Abstracts notification infrastructure
+
+### 💉 **Dependency Injection Container**
+
+The application uses a custom lightweight DI container to manage dependencies and follow the **Dependency Inversion Principle**, a core tenet of hexagonal architecture.
+
+#### 🏗️ **Container Architecture**
+
+```typescript
+// Simple singleton-based DI container
+class Container {
+  register<T>(key: string, factory: () => T): void
+  resolve<T>(key: string): T
+  has(key: string): boolean
+  clear(): void
+}
+```
+
+#### 🚀 **Composition Root (BootstrapContainer)**
+
+The `BootstrapContainer` is the **single source of truth** for dependency wiring:
+
+```typescript
+function createApplicationContainer(config: ApplicationConfig): Container
+```
+
+**Benefits:**
+- **🎯 Single Responsibility**: Dependencies are created in one place
+- **🧪 Testability**: Easy to mock dependencies for testing
+- **🔒 Encapsulation**: Implementation details hidden from consumers
+- **♻️ Reusability**: Same container setup across environments
+- **📦 Type Safety**: Full TypeScript support with generics
+
+**Current Status**: The DI container infrastructure is in place. Next steps will refactor service layer components to accept dependencies via constructor injection instead of creating them directly.
 
 ## 🎯 Type Safety & Code Quality
 
